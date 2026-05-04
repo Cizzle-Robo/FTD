@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pallet Defenders: Co-Op Edition</title>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
+        body {
+            /* Vibrant sky background */
+            background: radial-gradient(circle, #6dd5ed 0%, #2193b0 100%);
+            color: #fff;
+            font-family: 'Fredoka One', cursive, sans-serif; /* Cartoon font! */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 10px;
+            min-height: 100vh;
+        }
+        
+        /* --- MAIN MENU STYLES (BTD6 VIBE) --- */
+        #main-menu {
+            width: 800px; 
+            /* Chunky wooden board look */
+            background: #8b5a2b; 
+            padding: 30px; 
+            box-sizing: border-box;
+            border-radius: 25px; 
+            border: 8px solid #5c3a21; 
+            box-shadow: 0 15px 0 #3e2717, 0 20px 20px rgba(0,0,0,0.5);
+            text-align: center; 
+            margin-top: 40px;
+        }
+
+        #main-menu h1 { 
+            color: #f1c40f; 
+            font-size: 48px; 
+            margin-top: 0; 
+            margin-bottom: 20px;
+            /* Heavy stroke effect */
+            text-shadow: 3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 0 8px 0 #c23616;
+            letter-spacing: 2px;
+        }
+
+        .menu-section {
+            background: #fdf5e6; /* Light paper/wood inset */
+            padding: 20px; 
+            margin-bottom: 20px;
+            border-radius: 15px; 
+            border: 4px solid #deb887;
+            box-shadow: inset 0 5px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            color: #333;
+        }
+
+        .menu-section h3 { 
+            margin-top: 0; 
+            color: #2c3e50; 
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+
+        .menu-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 15px; 
+        }
+        
+        /* Chunky 3D Buttons */
+        .opt-btn {
+            background-color: #3498db; 
+            border: 4px solid #2980b9; 
+            color: white;
+            padding: 15px 10px; 
+            cursor: pointer; 
+            border-radius: 12px; 
+            font-family: 'Fredoka One', cursive;
+            font-size: 16px;
+            box-shadow: 0 8px 0 #1f618d; /* 3D bottom edge */
+            transition: all 0.1s ease;
+            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+        }
+
+        .opt-btn:hover { 
+            transform: translateY(2px);
+            box-shadow: 0 6px 0 #1f618d;
+            background-color: #5dade2;
+        }
+
+        .opt-btn:active {
+            transform: translateY(8px);
+            box-shadow: 0 0 0 #1f618d;
+        }
+
+        .opt-btn.active { 
+            background-color: #2ecc71; 
+            border-color: #27ae60;
+            box-shadow: 0 8px 0 #1e8449;
+        }
+        .opt-btn.active:hover { background-color: #2ecc71; }
+        
+        .opt-btn small {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #fff;
+            text-shadow: none;
+            background: rgba(0,0,0,0.3);
+            border-radius: 4px;
+            padding: 2px;
+        }
+
+        /* Giant Play Button */
+        #start-btn {
+            background-color: #51d02e; /* BTD6 Green */
+            color: white; 
+            border: 6px solid #3fa224; 
+            padding: 20px 40px;
+            font-size: 32px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            width: 80%;
+            font-family: 'Fredoka One', cursive;
+            text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+            box-shadow: 0 10px 0 #2e7a19, 0 15px 20px rgba(0,0,0,0.4);
+            transition: all 0.1s ease;
+            text-transform: uppercase;
+        }
+
+        #start-btn:hover { 
+            background-color: #61e83b; 
+            transform: translateY(2px) scale(1.02);
+            box-shadow: 0 8px 0 #2e7a19, 0 15px 20px rgba(0,0,0,0.4);
+        }
+
+        #start-btn:active {
+            transform: translateY(10px) scale(0.98);
+            box-shadow: 0 0 0 #2e7a19;
+        }
+
+        #start-btn:disabled { 
+            background-color: #7f8c8d; 
+            border-color: #606b6b;
+            box-shadow: 0 10px 0 #4a5252;
+            cursor: not-allowed; 
+            transform: none;
+        }
+
+        /* --- GAME STYLES --- */
+        #game-container { display: none; flex-direction: column; align-items: center; }
+        
+        #ui-bar {
+            width: 800px; display: flex; justify-content: space-between; align-items: center;
+            background: #2c3e50; padding: 10px 20px; box-sizing: border-box; 
+            border-radius: 15px 15px 0 0; border: 6px solid #1a252f; border-bottom: none;
+            font-size: 22px; text-shadow: 2px 2px 0 #000;
+        }
+        
+        #tower-controls {
+            width: 800px; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;
+            background: #8b5a2b; padding: 15px; box-sizing: border-box;
+            border-left: 6px solid #1a252f; border-right: 6px solid #1a252f;
+        }
+
+        .tower-btn {
+            background-color: #f1c40f; border: 4px solid #f39c12; color: #fff;
+            padding: 8px 12px; cursor: pointer; border-radius: 10px; 
+            font-family: 'Fredoka One', cursive; font-size: 14px; 
+            box-shadow: 0 5px 0 #d35400; transition: 0.1s;
+            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+        }
+        .tower-btn:hover { transform: translateY(2px); box-shadow: 0 3px 0 #d35400; }
+        .tower-btn:active { transform: translateY(5px); box-shadow: 0 0 0 #d35400; }
+        .tower-btn.active { border-color: #fff; background-color: #e67e22; }
+        .tower-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        canvas { 
+            background-color: #a3cb38; /* Grassy green background for maps */
+            border: 6px solid #1a252f; 
+            cursor: crosshair; 
+        }
+        
+        #upgrade-panel {
+            width: 800px; background: #2c3e50; border: 6px solid #1a252f; border-top: none;
+            border-radius: 0 0 15px 15px; padding: 15px; box-sizing: border-box; display: flex;
+            justify-content: space-between; align-items: center; min-height: 90px;
+            font-family: 'Segoe UI', sans-serif; /* Keep reading text readable */
+        }
+
+        .upgrade-btn {
+            background-color: #27ae60; color: white; border: 3px solid #1e8449; padding: 8px 15px;
+            border-radius: 8px; font-weight: bold; cursor: pointer; margin-left: 5px;
+            box-shadow: 0 4px 0 #145a32; transition: 0.1s; font-family: 'Fredoka One', cursive;
+        }
+        .upgrade-btn:hover { transform: translateY(2px); box-shadow: 0 2px 0 #145a32; }
+        .upgrade-btn:active { transform: translateY(4px); box-shadow: 0 0 0 #145a32; }
+        .upgrade-btn:disabled { background-color: #7f8c8d; border-color: #606b6b; box-shadow: 0 4px 0 #4a5252; }
+        
+        .spec-btn-a { background-color: #e67e22; border-color: #d35400; box-shadow: 0 4px 0 #a04000; }
+        .spec-btn-b { background-color: #9b59b6; border-color: #8e44ad; box-shadow: 0 4px 0 #6c3483; }
+        
+        .money { color: #f1c40f; }
+        .health { color: #e74c3c; }
+        .wave-text { color: #3498db; }
+        
+        .instructions { font-size: 14px; text-align: center; margin-top: 15px; text-shadow: 1px 1px 2px #000; }
+        
+        /* P2P Inputs */
+        #join-id { 
+            padding: 12px; border-radius: 8px; border: 3px solid #bdc3c7; 
+            flex-grow: 1; font-family: 'Fredoka One', cursive; font-size: 16px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-menu">
+        <h1>📦 Pallet Defenders</h1>
+        
+        <div class="menu-section">
+            <h3>1. Select Map Layout</h3>
+            <div class="menu-grid" id="map-select">
+                <button class="opt-btn active" onclick="setMap(0)">1. Serpentine<small>Map: Easy</small></button>
+                <button class="opt-btn" onclick="setMap(1)">2. Switchback<small>Map: Easy</small></button>
+                <button class="opt-btn" onclick="setMap(2)">3. Classic Aisle<small>Map: Medium</small></button>
+                <button class="opt-btn" onclick="setMap(3)">4. The Spiral<small>Map: Medium</small></button>
+                <button class="opt-btn" onclick="setMap(4)">5. Perimeter Breach<small>Map: Hard</small></button>
+                <button class="opt-btn" onclick="setMap(5)">6. Express Lane<small>Map: Hard</small></button>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <h3>2. Select Game Difficulty</h3>
+            <div class="menu-grid" id="diff-select">
+                <button class="opt-btn" onclick="setDiff(0)">Easy<small>30 HP | $400</small></button>
+                <button class="opt-btn active" onclick="setDiff(1)">Normal<small>20 HP | $300</small></button>
+                <button class="opt-btn" onclick="setDiff(2)">Hard<small>10 HP | $200</small></button>
+            </div>
+            <div style="margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Segoe UI', sans-serif; font-weight: bold;">
+                <input type="checkbox" id="challenge-mode" style="width: 24px; height: 24px; cursor: pointer; accent-color: #e74c3c;">
+                <span id="challenge-desc">Challenge Mode: Disabled</span>
+            </div>
+        </div>
+
+        <div class="menu-section" id="multiplayer-ui">
+            <h3>3. Co-Op Multiplayer (Optional)</h3>
+            <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
+                <button class="opt-btn" onclick="hostGame()" style="background: #9b59b6; border-color: #8e44ad; box-shadow: 0 8px 0 #6c3483; flex: 1;">Host Co-Op Game</button>
+                <span id="my-id-display" style="color: #c0392b; font-weight: bold; flex: 1; text-align: center; font-size: 20px;"></span>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 15px;">
+                <input type="text" id="join-id" placeholder="ENTER 5-LETTER CODE" maxlength="5" style="text-transform: uppercase;">
+                <button class="opt-btn" onclick="joinGame()" style="background: #e67e22; border-color: #d35400; box-shadow: 0 8px 0 #a04000;">Join Game</button>
+            </div>
+            <p id="network-status" style="color: #27ae60; font-weight: bold; margin-top: 15px; text-align: center; font-size: 18px;">Playing Solo</p>
+        </div>
+
+        <button id="start-btn" onclick="initHostGame()">START GAME</button>
+    </div>
+
+    <div id="game-container">
+        <div id="ui-bar">
+            <div>📦 Cardboard: <span class="money">$<span id="moneyDisplay">300</span></span></div>
+            <div>🌊 Wave: <span class="wave-text" id="waveDisplay">1</span> <span id="waveStatus" style="font-size: 14px; font-weight: normal; font-family: 'Segoe UI'; text-shadow: none;">(Preparing...)</span></div>
+            <div>❤️ Dock: <span class="health" id="healthDisplay">20</span></div>
+        </div>
+
+        <div id="tower-controls"></div>
+        <canvas id="gameCanvas" width="800" height="500"></canvas>
+
+        <div id="upgrade-panel">
+            <div id="upgrade-info" style="flex: 1;">Select a placed forklift to view stats or upgrade.</div>
+            <div id="upgrade-actions" style="display: flex; gap: 10px;"></div>
+        </div>
+        
+        <div class="instructions">
+            <strong>Enemies:</strong> 🔴 Roomba (Fast) | 🟢 Barrel (Tank) | ⚪ Drone (Flying) | 🟣 Boss (Massive)<br>
+            <button onclick="location.reload()" style="margin-top: 10px; padding: 8px 15px; background: #c0392b; color: white; border: 3px solid #922b21; border-radius: 8px; font-family: 'Fredoka One', cursive; cursor: pointer; box-shadow: 0 4px 0 #641e16;">Quit Game</button>
+        </div>
+    </div>
+
+<script>
+    // --- GLOBAL VARIABLES & DOM ---
+    const mainMenu = document.getElementById('main-menu');
+    const gameContainer = document.getElementById('game-container');
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const startBtn = document.getElementById('start-btn');
+
+    // Menu State
+    let selectedMapIdx = 0;
+    let selectedDiffIdx = 1; 
+    let isChallenge = false;
+
+    // Game Engine State
+    const TILE_SIZE = 50;
+    let cardboard = 300; let baseHealth = 20; let gameOver = false;
+    let frameCount = 0; let animId = null;
+    let currentWave = 1; let waveTimer = 300; let waveActive = false;
+    let enemiesToSpawn = []; let spawnTimer = 0;
+
+    let enemies = []; let towers = []; let projectiles = []; let particles = []; 
+    let currentMap = []; let currentWaypoints = []; let dockPos = {x: 0, y: 0};
+
+    const BASE_TOWER_TYPES = [
+        { id: 0, name: "Counterbalance", cost: 50, range: 120, damage: 10, cd: 40, color: '#f1c40f', pColor: '#8e44ad', aoeRadius: 0, type: 'turret',
+          specA: { name: "Propane", desc: "Burns targets.", color: '#e67e22' }, specB: { name: "Electric", desc: "Lightning arcs.", color: '#9b59b6' } },
+        { id: 1, name: "Reach Truck", cost: 100, range: 280, damage: 35, cd: 100, color: '#3498db', pColor: '#2c3e50', aoeRadius: 0, type: 'turret',
+          specA: { name: "Heavy Anvil", desc: "Stuns targets.", color: '#34495e' }, specB: { name: "Twin Forks", desc: "Fires fast.", color: '#2980b9' } },
+        { id: 2, name: "Telehandler", cost: 150, range: 140, damage: 15, cd: 80, color: '#e67e22', pColor: '#d35400', aoeRadius: 60, type: 'turret',
+          specA: { name: "Sticky Peanuts", desc: "AoE slows.", color: '#f39c12' }, specB: { name: "Shrapnel", desc: "AoE dmg up.", color: '#c0392b' } },
+        { id: 3, name: "Pallet Jack", cost: 75, range: 25, damage: 20, cd: 60, color: '#95a5a6', type: 'trap',
+          specA: { name: "Spiked", desc: "Bleeds targets.", color: '#c0392b' }, specB: { name: "Motorized", desc: "Fast trigger.", color: '#16a085' } },
+        { id: 4, name: "Order Picker", cost: 200, range: 150, damage: 0, cd: 0, color: '#1abc9c', type: 'aura',
+          specA: { name: "Loudspeaker", desc: "Range up.", color: '#16a085' }, specB: { name: "Overtime", desc: "Buff up.", color: '#f1c40f' } }
+    ];
+    let ACTIVE_TOWERS = []; 
+    let currentTowerTypeIndex = 0;
+    let selectedPlacedTower = null;
+
+    const ENEMY_TYPES = {
+        ROOMBA: { hp: 20, spd: 1.8, color: '#e74c3c', rad: 10, reward: 5, flying: false },
+        BARREL: { hp: 80, spd: 0.8, color: '#27ae60', rad: 14, reward: 15, flying: false },
+        DRONE:  { hp: 15, spd: 2.2, color: '#ecf0f1', rad: 8, reward: 10, flying: true },
+        BOSS:   { hp: 400, spd: 0.6, color: '#8e44ad', rad: 18, reward: 100, flying: false }
+    };
+
+    const MAPS_DATA = [
+        { grid: [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0],[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1]], wp: [{x:-25,y:75}, {x:725,y:75}, {x:725,y:175}, {x:75,y:175}, {x:75,y:275}, {x:725,y:275}, {x:725,y:375}, {x:425,y:375}, {x:425,y:475}, {x:825,y:475}] },
+        { grid: [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0],[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0],[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1]], wp: [{x:-25,y:75}, {x:675,y:75}, {x:675,y:175}, {x:125,y:175}, {x:125,y:275}, {x:675,y:275}, {x:675,y:375}, {x:125,y:375},{x:125,y:475}, {x:825,y:475}] },
+        { grid: [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],[0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0],[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]], wp: [{x:-25,y:75}, {x:625,y:75}, {x:625,y:225}, {x:175,y:225}, {x:175,y:375}, {x:825,y:375}] },
+        { grid: [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,0],[0,1,0,1,1,1,1,1,1,1,1,0,1,0,1,0],[0,1,0,1,0,0,0,0,0,0,1,0,1,0,1,0],[0,1,0,1,0,1,1,1,1,0,1,0,1,0,1,0],[0,1,0,1,0,0,0,0,1,0,1,0,1,0,1,0],[0,1,0,1,1,1,1,1,1,0,1,0,1,0,1,0],[0,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0]], wp: [{x:-25,y:25}, {x:725,y:25}, {x:725,y:475}, {x:75,y:475}, {x:75,y:125}, {x:625,y:125}, {x:625,y:375}, {x:175,y:375}, {x:175,y:225}, {x:525,y:225}, {x:525,y:325}, {x:275,y:325}] },
+        { grid: [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],[1,0,0,1,1,1,1,1,1,1,1,1,0,0,0,1],[1,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1],[1,0,0,1,0,0,1,1,1,0,0,1,0,0,0,1],[1,0,0,1,0,0,0,0,1,0,0,1,0,0,0,1],[1,0,0,1,1,1,1,1,1,0,0,1,0,0,0,1],[1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],[1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1]], wp: [{x:-25,y:25}, {x:775,y:25}, {x:775,y:475}, {x:25,y:475}, {x:25,y:175}, {x:575,y:175}, {x:575,y:375}, {x:175,y:375}, {x:175,y:275}, {x:425,y:275}] },
+        { grid: [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]], wp: [{x:-25,y:225}, {x:825,y:225}] }
+    ];
+
+    // --- P2P MULTIPLAYER NETCODE ---
+    let peer = null;
+    let networkConn = null;
+    let isHost = true; 
+    let clientRenderState = null;
+
+    function generateSimpleCode() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let result = '';
+        for (let i = 0; i < 5; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+    }
+
+    function hostGame() {
+        document.getElementById('network-status').innerText = "Generating Room Code...";
+        const roomCode = generateSimpleCode();
+        
+        peer = new Peer('pallet-' + roomCode);
+        
+        peer.on('open', id => {
+            document.getElementById('my-id-display').innerText = "Code: " + roomCode;
+            document.getElementById('network-status').innerText = "Waiting for Player 2 to join...";
+        });
+        
+        peer.on('connection', conn => {
+            networkConn = conn;
+            document.getElementById('network-status').innerText = "Player 2 Connected! Start when ready.";
+            setupNetworkListeners();
+        });
+    }
+
+    function joinGame() {
+        const joinCode = document.getElementById('join-id').value.toUpperCase().trim();
+        if (!joinCode || joinCode.length !== 5) { 
+            alert("Please enter a valid 5-character Room Code!"); 
+            return; 
+        }
+        
+        isHost = false; 
+        startBtn.disabled = true; 
+        startBtn.innerText = "WAITING FOR HOST...";
+        
+        peer = new Peer(); 
+        
+        peer.on('open', () => {
+            document.getElementById('network-status').innerText = "Connecting to Host...";
+            networkConn = peer.connect('pallet-' + joinCode);
+            
+            networkConn.on('open', () => {
+                document.getElementById('network-status').innerText = "Connected! Waiting for Host to start...";
+                setupNetworkListeners();
+            });
+        });
+    }
+
+    function setupNetworkListeners() {
+        networkConn.on('data', data => {
+            if (isHost) {
+                if (data.type === 'BUILD_TOWER') {
+                    const conf = ACTIVE_TOWERS[data.towerIdx];
+                    if (cardboard >= conf.cost && currentMap[data.y][data.x] === 0) {
+                        towers.push(new Tower(data.x, data.y, conf));
+                        currentMap[data.y][data.x] = 2; cardboard -= conf.cost; updateTopUI();
+                    }
+                } else if (data.type === 'UPGRADE_TOWER') {
+                    const t = towers.find(t => t.gridX === data.x && t.gridY === data.y);
+                    if (t) { selectedPlacedTower = t; upgradeTower(data.uType); selectedPlacedTower = null; }
+                }
+            } else {
+                if (data.type === 'START_GAME') {
+                    currentMap = data.map; currentWaypoints = data.wp; dockPos = data.dock;
+                    ACTIVE_TOWERS = data.towers; buildTowerUI();
+                    mainMenu.style.display = 'none'; gameContainer.style.display = 'flex';
+                    if (animId) cancelAnimationFrame(animId);
+                    gameLoop(); 
+                } else if (data.type === 'SYNC_STATE') {
+                    cardboard = data.cb; baseHealth = data.hp; currentWave = data.wave;
+                    clientRenderState = data; updateTopUI();
+                }
+            }
+        });
+    }
+
+    // --- MENU LOGIC ---
+    function setMap(idx) { selectedMapIdx = idx; document.querySelectorAll('#map-select .opt-btn').forEach((btn, i) => btn.classList.toggle('active', i === idx)); }
+    function setDiff(idx) { selectedDiffIdx = idx; document.querySelectorAll('#diff-select .opt-btn').forEach((btn, i) => btn.classList.toggle('active', i === idx)); }
+    
+    document.getElementById('challenge-mode').addEventListener('change', e => {
+        isChallenge = e.target.checked;
+        document.getElementById('challenge-desc').innerText = isChallenge ? "Challenge Mode: Enabled!" : "Challenge Mode: Disabled";
+    });
+
+    function initHostGame() {
+        if (!isHost) return; 
+        
+        currentMap = JSON.parse(JSON.stringify(MAPS_DATA[selectedMapIdx].grid));
+        currentWaypoints = JSON.parse(JSON.stringify(MAPS_DATA[selectedMapIdx].wp));
+        dockPos = { gridX: Math.floor(currentWaypoints[currentWaypoints.length - 1].x/TILE_SIZE), gridY: Math.floor(currentWaypoints[currentWaypoints.length - 1].y/TILE_SIZE) };
+
+        let diffConfig = [{ hp: 30, cash: 400 }, { hp: 20, cash: 300 }, { hp: 10, cash: 200 }][selectedDiffIdx];
+        baseHealth = diffConfig.hp; cardboard = diffConfig.cash;
+        
+        ACTIVE_TOWERS = JSON.parse(JSON.stringify(BASE_TOWER_TYPES));
+        if (isChallenge) ACTIVE_TOWERS.forEach(t => t.cost = Math.floor(t.cost * 1.2));
+
+        if (networkConn && networkConn.open) {
+            networkConn.send({ type: 'START_GAME', map: currentMap, wp: currentWaypoints, dock: dockPos, towers: ACTIVE_TOWERS });
+        }
+
+        buildTowerUI();
+        mainMenu.style.display = 'none'; gameContainer.style.display = 'flex';
+        
+        enemies = []; towers = []; projectiles = []; particles = [];
+        frameCount = 0; currentWave = 1; waveTimer = 180; waveActive = false;
+        gameOver = false; selectedPlacedTower = null; updateUpgradeUI();
+        
+        updateTopUI(); if (animId) cancelAnimationFrame(animId); gameLoop();
+    }
+
+    function buildTowerUI() {
+        document.getElementById('tower-controls').innerHTML = "";
+        ACTIVE_TOWERS.forEach((t, i) => {
+            let info = t.type === 'trap' ? ', Path' : (t.type==='aura' ? ', Buff' : '');
+            let btn = `<button class="tower-btn ${i===0?'active':''}" onclick="selectTowerType(${i})">${i+1}. ${t.name} ($${t.cost}${info})</button>`;
+            document.getElementById('tower-controls').innerHTML += btn;
+        });
+        currentTowerTypeIndex = 0;
+    }
+
+    function updateTopUI() {
+        document.getElementById('moneyDisplay').innerText = cardboard;
+        document.getElementById('healthDisplay').innerText = baseHealth;
+        document.getElementById('waveDisplay').innerText = currentWave;
+    }
+
+    // --- GAME ENGINE ---
+    window.selectTowerType = function(index) {
+        currentTowerTypeIndex = index; selectedPlacedTower = null; updateUpgradeUI();
+        document.querySelectorAll('.tower-btn').forEach((btn, i) => btn.classList.toggle('active', i === index));
+    }
+
+    function updateUpgradeUI() {
+        const uInfo = document.getElementById('upgrade-info'); const uAct = document.getElementById('upgrade-actions');
+        if (!selectedPlacedTower) { uInfo.innerHTML = "Select a placed forklift to view stats or upgrade."; uAct.innerHTML = ""; return; }
+        
+        const t = selectedPlacedTower;
+        let statsHtml = `<strong style="font-size: 18px;">${t.config.name} (Level ${t.level})</strong><br>Range: ${Math.round(t.range)}`;
+        if (t.specName) statsHtml += ` <br><span style="color:${t.specColor}; font-weight: bold;">[${t.specName}]</span>`;
+
+        let actionHtml = "";
+        if (t.level === 1) {
+            let cost = t.config.cost; let canAfford = cardboard >= cost ? "" : "disabled";
+            actionHtml = `<button class="upgrade-btn" ${canAfford} onclick="processUpgrade('basic')">Upgrade Lvl 2 ($${cost})</button>`;
+        } else if (t.level === 2) {
+            let cost = Math.floor(t.config.cost * 1.5); let canAfford = cardboard >= cost ? "" : "disabled";
+            actionHtml = `<button class="upgrade-btn spec-btn-a" ${canAfford} onclick="processUpgrade('A')">${t.config.specA.name} ($${cost})</button>
+                          <button class="upgrade-btn spec-btn-b" ${canAfford} onclick="processUpgrade('B')">${t.config.specB.name} ($${cost})</button>`;
+        } else { actionHtml = `<span class="money" style="font-weight:bold; font-size: 20px;">MAX LEVEL</span>`; }
+        uInfo.innerHTML = statsHtml; uAct.innerHTML = actionHtml;
+    }
+
+    window.processUpgrade = function(type) {
+        if (!selectedPlacedTower) return;
+        if (!isHost) {
+            networkConn.send({ type: 'UPGRADE_TOWER', x: selectedPlacedTower.gridX, y: selectedPlacedTower.gridY, uType: type });
+            selectedPlacedTower = null; updateUpgradeUI(); return;
+        }
+        upgradeTower(type);
+    }
+
+    function upgradeTower(type) {
+        const t = selectedPlacedTower;
+        let cost = type === 'basic' ? t.config.cost : Math.floor(t.config.cost * 1.5);
+        if (cardboard >= cost) {
+            cardboard -= cost; t.level++;
+            if (type === 'basic') { t.baseDamage *= 1.5; t.baseRange *= 1.1; t.baseCd *= 0.8; } 
+            else if (type === 'A') { t.specialization = 'A'; t.specName = t.config.specA.name; t.specColor = t.config.specA.color; t.baseDamage *= 2; } 
+            else if (type === 'B') { t.specialization = 'B'; t.specName = t.config.specB.name; t.specColor = t.config.specB.color; t.baseCd *= 0.5; }
+            t.damage = t.baseDamage; t.range = t.baseRange; t.cd = t.baseCd;
+            updateUpgradeUI(); updateTopUI();
+        }
+    }
+
+    class Enemy {
+        constructor(c) {
+            this.x = currentWaypoints[0].x; this.y = currentWaypoints[0].y; this.wpIdx = 1;
+            let speedMod = isChallenge ? 1.2 : 1.0;
+            this.speed = c.spd * speedMod; this.maxHp = c.hp * (1+(currentWave*0.1)); this.hp = this.maxHp;
+            this.rad = c.rad; this.color = c.color; this.reward = c.reward; this.fly = c.flying;
+            this.sts = { stun: 0, slow: 0, burn: 0 };
+        }
+        update() {
+            let spd = this.speed;
+            if (this.sts.stun > 0) { spd = 0; this.sts.stun--; } else if (this.sts.slow > 0) { spd *= 0.5; this.sts.slow--; }
+            if (this.sts.burn > 0) { if (frameCount % 10 === 0) this.hp -= 2; this.sts.burn--; }
+            const tgt = currentWaypoints[this.wpIdx]; const dx = tgt.x - this.x; const dy = tgt.y - this.y; const dist = Math.hypot(dx, dy);
+            if (dist < spd) { this.x = tgt.x; this.y = tgt.y; this.wpIdx++; } else { this.x += (dx/dist)*spd; this.y += (dy/dist)*spd; }
+        }
+    }
+
+    class Tower {
+        constructor(gx, gy, conf) {
+            this.gridX = gx; this.gridY = gy; this.x = (gx*TILE_SIZE)+25; this.y = (gy*TILE_SIZE)+25;
+            this.config = conf; this.level = 1; this.specColor = null; this.specName = null;
+            this.baseRange = conf.range; this.baseDamage = conf.damage; this.baseCd = conf.cd;
+            this.range = this.baseRange; this.damage = this.baseDamage; this.cd = this.baseCd;
+            this.timer = 0; this.angle = 0;
+        }
+        update() {
+            if (this.timer > 0) this.timer--;
+            if (this.config.type === 'aura') return;
+            let tgt = null; let minD = Infinity;
+            for (let e of enemies) {
+                const d = Math.hypot(e.x - this.x, e.y - this.y);
+                if (this.config.type === 'trap' && d < this.range && this.timer === 0 && !e.fly) {
+                    e.hp -= this.damage; this.timer = this.cd;
+                } else if (this.config.type === 'turret' && d < this.range && d < minD && !(e.fly && this.config.id === 2)) {
+                    minD = d; tgt = e;
+                }
+            }
+            if (tgt && this.config.type === 'turret') {
+                this.angle = Math.atan2(tgt.y - this.y, tgt.x - this.x);
+                if (this.timer === 0) { projectiles.push(new Projectile(this.x, this.y, tgt, this)); this.timer = this.cd; }
+            }
+        }
+    }
+
+    class Projectile {
+        constructor(x, y, t, twr) { this.x = x; this.y = y; this.tgt = t; this.twr = twr; this.dmg = twr.damage; this.spd = 8; }
+        update() {
+            if (this.tgt.hp <= 0) return true;
+            const d = Math.hypot(this.tgt.x - this.x, this.tgt.y - this.y);
+            if (d < this.spd) {
+                if (this.twr.config.aoeRadius > 0) {
+                    for (let e of enemies) if (Math.hypot(e.x - this.tgt.x, e.y - this.tgt.y) <= this.twr.config.aoeRadius) e.hp -= this.dmg;
+                } else { this.tgt.hp -= this.dmg; }
+                return true; 
+            } else { this.x += ((this.tgt.x-this.x)/d)*this.spd; this.y += ((this.tgt.y-this.y)/d)*this.spd; return false; }
+        }
+    }
+
+    canvas.addEventListener('click', e => {
+        const rect = canvas.getBoundingClientRect();
+        const gX = Math.floor((e.clientX - rect.left) / TILE_SIZE); const gY = Math.floor((e.clientY - rect.top) / TILE_SIZE);
+        if(gX < 0 || gX > 15 || gY < 0 || gY > 9) return;
+
+        let clickedTower = isHost ? towers.find(t => t.gridX === gX && t.gridY === gY) 
+            : (clientRenderState ? clientRenderState.t.find(t => t.gridX === gX && t.gridY === gY) : null);
+
+        if (clickedTower) { selectedPlacedTower = clickedTower; updateUpgradeUI(); return; }
+
+        const conf = ACTIVE_TOWERS[currentTowerTypeIndex];
+        const onPath = currentMap[gY][gX] === 1; const onEmpty = currentMap[gY][gX] === 0;
+
+        if ((conf.type === 'trap' && onPath) || (conf.type !== 'trap' && onEmpty)) {
+            selectedPlacedTower = null;
+            if (!isHost) {
+                networkConn.send({ type: 'BUILD_TOWER', x: gX, y: gY, towerIdx: currentTowerTypeIndex });
+            } else if (cardboard >= conf.cost) {
+                towers.push(new Tower(gX, gY, conf)); currentMap[gY][gX] = 2; cardboard -= conf.cost; updateTopUI();
+            }
+        } else { selectedPlacedTower = null; }
+        updateUpgradeUI();
+    });
+
+    // --- RENDER & LOOP ---
+    function drawBaseMap() {
+        // Adjust the map draw colors slightly to match the brighter aesthetic
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let r = 0; r < currentMap.length; r++) {
+            for (let c = 0; c < currentMap[r].length; c++) {
+                if (currentMap[r][c] === 1) {
+                    ctx.fillStyle = '#ecf0f1'; ctx.fillRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE); // Brighter path
+                    ctx.fillStyle = '#bdc3c7'; ctx.fillRect(c * TILE_SIZE + 5, r * TILE_SIZE + 5, TILE_SIZE-10, TILE_SIZE-10);
+                }
+            }
+        }
+        ctx.fillStyle = '#e74c3c'; ctx.fillRect(dockPos.gridX*TILE_SIZE, dockPos.gridY*TILE_SIZE, 50, 50); // Red dock
+        ctx.fillStyle = 'white'; ctx.font = '14px "Fredoka One"'; ctx.fillText("DOCK", dockPos.gridX*TILE_SIZE + 5, dockPos.gridY*TILE_SIZE + 30);
+    }
+
+    function drawEntities(tList, eList, pList) {
+        if(selectedPlacedTower) { ctx.fillStyle='rgba(236,240,241,0.3)'; ctx.beginPath(); ctx.arc((selectedPlacedTower.gridX*TILE_SIZE)+25, (selectedPlacedTower.gridY*TILE_SIZE)+25, selectedPlacedTower.range, 0, Math.PI*2); ctx.fill(); }
+        
+        for (let t of tList) {
+            ctx.save(); ctx.translate(t.x || (t.gridX*TILE_SIZE)+25, t.y || (t.gridY*TILE_SIZE)+25);
+            if (t.type !== 'aura') ctx.rotate(t.angle || t.a || 0);
+            ctx.fillStyle = t.specColor || t.specC || t.config?.color || t.c;
+            ctx.fillRect(-15, -15, 30, 30); ctx.fillStyle = '#2c3e50'; ctx.fillRect(-5, -5, 10, 10);
+            ctx.fillStyle = '#f1c40f'; let lvl = t.level || t.lvl; if (lvl >= 2) ctx.fillRect(-12, -12, 4, 24); if (lvl >= 3) ctx.fillRect(-6, -12, 4, 24);
+            ctx.restore();
+        }
+        for (let p of pList) { ctx.fillStyle = p.c; ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI*2); ctx.fill(); }
+        for (let e of eList) {
+            ctx.fillStyle = e.color || e.c; ctx.beginPath(); ctx.arc(e.x, e.y, e.rad || e.r, 0, Math.PI * 2); ctx.fill();
+            if (e.fly) { ctx.strokeStyle = 'white'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(e.x-10, e.y-10); ctx.lineTo(e.x+10, e.y+10); ctx.stroke(); ctx.beginPath(); ctx.moveTo(e.x+10, e.y-10); ctx.lineTo(e.x-10, e.y+10); ctx.stroke(); ctx.lineWidth = 1; } 
+            else { ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.lineWidth = 2; ctx.stroke(); ctx.lineWidth = 1;}
+            
+            // Health bar
+            ctx.fillStyle = 'black'; ctx.fillRect(e.x - 11, e.y - 21, 22, 6);
+            ctx.fillStyle = 'red'; ctx.fillRect(e.x - 10, e.y - 20, 20, 4); 
+            ctx.fillStyle = '#2ecc71'; ctx.fillRect(e.x - 10, e.y - 20, 20 * Math.max(0, (e.hp||0) / (e.maxHp||1)), 4);
+        }
+    }
+
+    function gameLoop() {
+        if (gameOver) {
+            ctx.fillStyle = 'rgba(0,0,0,0.8)'; ctx.fillRect(0,0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white'; ctx.font = '40px "Fredoka One"'; 
+            ctx.shadowColor = 'black'; ctx.shadowBlur = 10;
+            ctx.fillText(`GAME OVER - Waved ${currentWave}`, 150, 250); 
+            ctx.shadowBlur = 0;
+            return;
+        }
+
+        drawBaseMap();
+
+        if (!isHost) {
+            if (clientRenderState) {
+                document.getElementById('waveStatus').innerText = clientRenderState.wTxt;
+                drawEntities(clientRenderState.t, clientRenderState.e, clientRenderState.p);
+            }
+            animId = requestAnimationFrame(gameLoop); return;
+        }
+
+        if (!waveActive) {
+            waveTimer--; document.getElementById('waveStatus').innerText = `(Next wave in ${Math.ceil(waveTimer/60)}s)`;
+            if (waveTimer <= 0) {
+                waveActive = true; enemiesToSpawn = []; let count = 5 + (currentWave * 3);
+                for (let i=0; i<count; i++) {
+                    if (currentWave >= 5 && i === count-1 && currentWave % 5 === 0) enemiesToSpawn.push(ENEMY_TYPES.BOSS);
+                    else if (currentWave >= 3 && Math.random() < 0.2) enemiesToSpawn.push(ENEMY_TYPES.DRONE);
+                    else if (currentWave >= 2 && Math.random() < 0.3) enemiesToSpawn.push(ENEMY_TYPES.BARREL);
+                    else enemiesToSpawn.push(ENEMY_TYPES.ROOMBA);
+                }
+                spawnTimer = 0;
+            }
+        } else {
+            spawnTimer--; document.getElementById('waveStatus').innerText = `(Spawning: ${enemiesToSpawn.length})`;
+            if (spawnTimer <= 0 && enemiesToSpawn.length > 0) { enemies.push(new Enemy(enemiesToSpawn.shift())); spawnTimer = 40; } 
+            else if (enemiesToSpawn.length === 0 && enemies.length === 0) {
+                waveActive = false; currentWave++; waveTimer = 300; cardboard += 50 + (currentWave * 10); updateTopUI(); if(selectedPlacedTower) updateUpgradeUI();
+            }
+        }
+
+        for (let t of towers) { t.damage = t.baseDamage; t.cd = t.baseCd; } 
+        for (let a of towers.filter(t => t.config.type === 'aura')) {
+            for (let t of towers) if (t.config.type !== 'aura' && Math.hypot(t.x - a.x, t.y - a.y) <= a.range) { t.damage += 5; t.cd *= 0.8; }
+        }
+
+        for (let t of towers) t.update();
+        for (let i = projectiles.length - 1; i >= 0; i--) if (projectiles[i].update()) projectiles.splice(i, 1);
+        for (let i = enemies.length - 1; i >= 0; i--) {
+            let e = enemies[i]; e.update();
+            if (e.wpIdx >= currentWaypoints.length) { baseHealth -= (e.maxHp > 150 ? 5 : 1); updateTopUI(); enemies.splice(i, 1); if (baseHealth <= 0) gameOver = true; continue; }
+            if (e.hp <= 0) { cardboard += e.reward; updateTopUI(); enemies.splice(i, 1); if(selectedPlacedTower) updateUpgradeUI(); }
+        }
+
+        drawEntities(towers, enemies, projectiles);
+
+        if (networkConn && networkConn.open && frameCount % 2 === 0) {
+            networkConn.send({
+                type: 'SYNC_STATE', cb: cardboard, hp: baseHealth, wave: currentWave, wTxt: document.getElementById('waveStatus').innerText,
+                e: enemies.map(e => ({x: e.x, y: e.y, hp: e.hp, maxHp: e.maxHp, r: e.rad, c: e.color, fly: e.fly})),
+                t: towers.map(t => ({gridX: t.gridX, gridY: t.gridY, x: t.x, y: t.y, a: t.angle, lvl: t.level, rng: t.range, specC: t.specColor, c: t.config.color, config: t.config })),
+                p: projectiles.map(p => ({x: p.x, y: p.y, c: p.twr.specColor || p.twr.config.pColor}))
+            });
+        }
+
+        frameCount++; animId = requestAnimationFrame(gameLoop);
+    }
+</script>
+</body>
+</html>
