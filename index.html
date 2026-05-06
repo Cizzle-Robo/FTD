@@ -50,7 +50,7 @@
 
         .wood-panel {
             background: #8b5a2b; border: 8px solid #5c3a21; box-shadow: 0 15px 0 #3e2717, 0 20px 20px rgba(0,0,0,0.5);
-            border-radius: 25px; padding: 30px; text-align: center; width: 800px; max-width: 90vw; position: relative;
+            border-radius: 25px; padding: 30px; text-align: center; width: 850px; max-width: 90vw; position: relative;
         }
         .wood-panel h2 { margin-top: 0; color: #fdf5e6; font-size: 36px; text-shadow: 3px 3px 0 #000; border-bottom: 4px dashed #5c3a21; padding-bottom: 10px; }
 
@@ -58,17 +58,34 @@
         .btn-back:hover { background-color: #f1948a; }
 
         .selection-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .card-btn { background-color: #fdf5e6; border: 6px solid #deb887; color: #333; padding: 20px 10px; cursor: pointer; border-radius: 15px; font-family: 'Fredoka One'; font-size: 20px; box-shadow: 0 8px 0 #cda470; transition: all 0.1s; text-shadow: none; }
+        .card-btn { background-color: #fdf5e6; border: 6px solid #deb887; color: #333; padding: 15px 10px; cursor: pointer; border-radius: 15px; font-family: 'Fredoka One'; font-size: 18px; box-shadow: 0 8px 0 #cda470; transition: all 0.1s; text-shadow: none; }
         .card-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 0 #cda470; }
         .card-btn:active { transform: translateY(8px); box-shadow: 0 0 0 transparent; }
         .card-btn.active { border-color: #2ecc71; background-color: #eafaf1; box-shadow: 0 8px 0 #27ae60; }
-        .card-btn span { display: block; font-size: 14px; color: #7f8c8d; margin-top: 8px; }
         
         .diff-badge { display: inline-block; padding: 3px 8px; border-radius: 5px; font-size: 12px; color: white; text-shadow: 1px 1px 0 #000; margin-top: 5px; }
         .diff-easy { background: #2ecc71; } .diff-med { background: #f39c12; } .diff-hard { background: #e74c3c; } .diff-expert { background: #8e44ad; }
 
-        .coop-input-group { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
-        #join-id { padding: 15px; border-radius: 12px; border: 4px solid #5c3a21; font-family: 'Fredoka One'; font-size: 24px; text-align: center; width: 200px; text-transform: uppercase; }
+        .coop-input-group { display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-direction: column; align-items: center; }
+        #join-id { padding: 15px; border-radius: 12px; border: 4px solid #5c3a21; font-family: 'Fredoka One'; font-size: 36px; text-align: center; width: 300px; text-transform: uppercase; margin-bottom: 10px;}
+
+        /* --- NEW MAP SELECTION STYLES --- */
+        .map-header-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; }
+        .map-categories { display: flex; gap: 10px; background: rgba(0, 0, 0, 0.4); padding: 10px; border-radius: 20px; margin-bottom: 15px;}
+        .map-categories button { background: #4a6fa5; border: 3px solid #2d456b; color: white; font-family: 'Fredoka One', cursive; font-size: 1.2rem; padding: 10px 20px; border-radius: 15px; cursor: pointer; transition: 0.1s; }
+        .map-categories button.active { background: #5cb85c; border-color: #3e8e41; }
+        .map-categories button:active { transform: scale(0.95); }
+
+        .map-carousel-container { display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%;}
+        .nav-arrow { background: #f1c40f; border: 4px solid #b38b00; color: white; font-size: 2rem; font-weight: bold; width: 50px; height: 70px; border-radius: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; text-shadow: 2px 2px 0 #000; box-shadow: 0 6px 0 #b38b00; transition: 0.1s; }
+        .nav-arrow:active { transform: translateY(4px); box-shadow: 0 2px 0 #b38b00; }
+
+        .map-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 15px; background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 20px; border: 4px solid #5c3a21; }
+        .map-card { position: relative; width: 220px; height: 140px; background: #a3cb38; border: 4px solid #fdf5e6; border-radius: 15px; overflow: hidden; cursor: pointer; box-shadow: 0 8px 15px rgba(0,0,0,0.5); transition: 0.1s; display: flex; flex-direction: column; align-items: center;}
+        .map-card:hover { transform: scale(1.05); border-color: #f1c40f; }
+        .map-card:active { transform: scale(0.95); }
+        .map-card canvas { width: 100%; height: 100%; display: block; }
+        .map-card-title { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0, 0, 0, 0.7); color: white; text-align: center; padding: 6px 0; font-size: 1rem; font-family: 'Fredoka One', cursive; text-shadow: 1px 1px 0 #000;}
 
         /* --- BTD6 IN-GAME UI --- */
         #game-wrapper {
@@ -84,7 +101,6 @@
             background: #a3cb38;
         }
 
-        /* Top Bar hovering over canvas */
         #game-main { position: relative; width: 800px; display: flex; flex-direction: column; }
         
         #top-ui {
@@ -113,34 +129,36 @@
 
         canvas { display: block; position: absolute; top: 0; left: 0; cursor: crosshair; }
 
-        /* Wood Sidebar */
         #game-sidebar {
             width: 300px; display: flex; flex-direction: column;
             background: #c18b57; border-left: 8px solid #5c3a21;
             box-shadow: -10px 0 20px rgba(0,0,0,0.5); z-index: 20; position: relative;
         }
 
-        /* Tower Selection Grid - FIXED SQUISHING */
+        /* Tabs for Categories */
+        #tower-tabs { display: flex; width: 100%; background: #5c3a21; flex-shrink: 0;}
+        .tab-btn { flex: 1; padding: 12px 2px; font-family: 'Fredoka One'; background: #8b5a2b; color: #fdf5e6; border: none; border-bottom: 4px solid transparent; cursor: pointer; font-size: 13px;}
+        .tab-btn.active { background: #c18b57; border-bottom-color: #f1c40f; }
+        .tab-btn:hover:not(.active) { background: #a06832; }
+
         #tower-controls {
             display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; 
-            padding: 15px; overflow-y: auto; flex: 1; align-content: start; /* Packs items to the top */
+            padding: 15px; overflow-y: auto; flex: 1; align-content: start; 
         }
         
-        /* Square Tower Cards - Added Names */
-        .tower-card {
+        .tower-card-ui {
             background: #fdf5e6; border: 5px solid #deb887; border-radius: 12px;
             display: flex; flex-direction: column; align-items: center; justify-content: space-between;
             cursor: pointer; box-shadow: 0 5px 0 #cda470; transition: 0.1s;
-            padding: 8px 5px; position: relative; overflow: hidden; height: 110px; /* Fixed height instead of ratio */
+            padding: 8px 5px; position: relative; overflow: hidden; height: 110px; 
         }
-        .tower-card:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #cda470; }
-        .tower-card.active { border-color: #2ecc71; background: #eafaf1; box-shadow: 0 5px 0 #27ae60; }
+        .tower-card-ui:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #cda470; }
+        .tower-card-ui.active { border-color: #2ecc71; background: #eafaf1; box-shadow: 0 5px 0 #27ae60; }
         
         .tower-card-name { font-size: 11px; color: #333; text-align: center; font-weight: bold; margin-bottom: 5px; text-shadow: none; line-height: 1.1; }
         .tower-color-block { width: 40px; height: 40px; border-radius: 8px; border: 3px solid #2c3e50; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; }
         .tower-card-price { background: #2c3e50; color: #f1c40f; font-size: 13px; padding: 2px 8px; border-radius: 5px; text-shadow: 1px 1px 0 #000; width: 100%; box-sizing: border-box; text-align: center; }
 
-        /* Upgrade Panel */
         #upgrade-panel { 
             display: none; flex: 1; background: #c18b57; padding: 15px; 
             box-sizing: border-box; flex-direction: column; gap: 10px; 
@@ -153,7 +171,6 @@
 
         #upgrade-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 5px; }
         
-        /* BTD6 Style Upgrade Row (Clickable) */
         .path-row { 
             background: #51d02e; border: 4px solid #3fa224; border-radius: 12px; padding: 10px 12px; 
             display: flex; flex-direction: column; cursor: pointer; box-shadow: 0 5px 0 #2e7a19;
@@ -173,7 +190,6 @@
         .sell-btn { background: #c0392b; border: 4px solid #922b21; color: white; font-family: 'Fredoka One'; padding: 12px; border-radius: 12px; cursor: pointer; text-shadow: 1px 1px 0 #000; box-shadow: 0 5px 0 #641e16; font-size: 18px; margin-top: auto; transition: 0.1s;}
         .sell-btn:active { transform: translateY(5px); box-shadow: 0 0 0 transparent; }
 
-        /* Play Button Area */
         .sidebar-bottom {
             background: #8b5a2b; border-top: 6px solid #5c3a21; padding: 15px; 
             display: flex; justify-content: flex-end; align-items: center;
@@ -189,7 +205,6 @@
         .play-wave-btn:active { transform: translateY(6px); box-shadow: 0 0 0 transparent; }
         .play-wave-btn:disabled { background: #7f8c8d; border-color: #606b6b; box-shadow: 0 6px 0 #4a5252; cursor: not-allowed; }
 
-        /* Settings Modal */
         #settings-modal {
             display: none; position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.8); z-index: 300; align-items: center; justify-content: center;
@@ -213,10 +228,10 @@
     <div id="btd6-menu">
         <div id="screen-home" class="menu-screen active">
             <h1 class="game-title">📦 PALLET<br>DEFENDERS</h1>
-            <button class="btd-btn btn-play" onclick="navTo('screen-maps')">PLAY</button>
+            <button class="btd-btn btn-play" onclick="startSolo()">SOLO PLAY</button>
             <div class="side-btns">
                 <button class="btd-btn btn-hero" onclick="navTo('screen-heroes')">HEROES</button>
-                <button class="btd-btn btn-coop" onclick="navTo('screen-coop')">CO-OP</button>
+                <button class="btd-btn btn-coop" onclick="navTo('screen-coop')">CO-OP (4P)</button>
             </div>
         </div>
 
@@ -231,17 +246,83 @@
             </div>
         </div>
 
-        <div id="screen-maps" class="menu-screen">
+        <div id="screen-coop" class="menu-screen">
             <div class="wood-panel">
                 <button class="btd-btn btn-back" onclick="navTo('screen-home')">◀ BACK</button>
-                <h2>Select Map</h2>
-                <div class="selection-grid">
-                    <button class="card-btn" onclick="selectMap(0)">Serpentine<br><div class="diff-badge diff-easy">Beginner</div></button>
-                    <button class="card-btn" onclick="selectMap(1)">Classic Aisle<br><div class="diff-badge diff-med">Intermediate</div></button>
-                    <button class="card-btn" onclick="selectMap(3)">Loading Dock<br><div class="diff-badge diff-med">Intermediate</div></button>
-                    <button class="card-btn" onclick="selectMap(2)">Express Lane<br><div class="diff-badge diff-hard">Advanced</div></button>
-                    <button class="card-btn" onclick="selectMap(4)">Cold Storage<br><div class="diff-badge diff-hard">Advanced</div></button>
-                    <button class="card-btn" onclick="selectMap(5)">Zig-Zag Shift<br><div class="diff-badge diff-expert">Expert</div></button>
+                <h2>Co-Op Multiplayer</h2>
+                <div class="side-btns" style="justify-content: center; margin-top: 30px;">
+                    <button class="btd-btn btn-play" style="font-size: 32px; padding: 20px 40px;" onclick="startCoopHost()">CREATE MATCH</button>
+                    <button class="btd-btn btn-coop" style="font-size: 32px; padding: 20px 40px;" onclick="navTo('screen-join')">JOIN MATCH</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-join" class="menu-screen">
+            <div class="wood-panel">
+                <button class="btd-btn btn-back" onclick="navTo('screen-coop')">◀ BACK</button>
+                <h2>Join Match</h2>
+                <div class="coop-input-group">
+                    <input type="text" id="join-id" placeholder="CODE" maxlength="5">
+                    <button class="btd-btn btn-play" style="font-size: 28px; padding: 15px 40px;" onclick="joinGame()">JOIN</button>
+                    <p id="join-status" style="color: #f1c40f; font-weight: bold; margin-top: 20px; font-size: 20px;"></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-lobby" class="menu-screen">
+            <div class="wood-panel">
+                <button class="btd-btn btn-back" onclick="location.reload()">◀ LEAVE</button>
+                <h2>Co-Op Lobby</h2>
+                <h3 id="lobby-code-display" style="color: #f1c40f; text-shadow: 1px 1px 0 #000; font-size: 24px;">Code: -----</h3>
+                <div class="selection-grid" id="lobby-players"></div>
+                <button id="btn-lobby-start" class="btd-btn btn-play" style="font-size: 32px; padding: 15px 40px; margin-top: 20px; display: none;" onclick="initHostGame()">START GAME</button>
+            </div>
+        </div>
+
+        <div id="screen-maps" class="menu-screen">
+            <div class="wood-panel" style="width: 900px;">
+                <button class="btd-btn btn-back" onclick="navTo('screen-home')">◀ BACK</button>
+                <div class="map-header-wrap">
+                    <h2 style="font-size: 48px; border:none; margin-bottom:0;">Select Track</h2>
+                    <div class="map-categories">
+                        <button class="active">Beginner</button>
+                        <button>Intermediate</button>
+                        <button>Advanced</button>
+                        <button>Expert</button>
+                    </div>
+                </div>
+
+                <div class="map-carousel-container">
+                    <button class="nav-arrow">◀</button>
+                    
+                    <div class="map-grid">
+                        <div class="map-card" onclick="selectMap(0)">
+                            <canvas id="map-prev-0" width="220" height="140"></canvas>
+                            <div class="map-card-title">Serpentine</div>
+                        </div>
+                        <div class="map-card" onclick="selectMap(1)">
+                            <canvas id="map-prev-1" width="220" height="140"></canvas>
+                            <div class="map-card-title">Classic Aisle</div>
+                        </div>
+                        <div class="map-card" onclick="selectMap(3)">
+                            <canvas id="map-prev-3" width="220" height="140"></canvas>
+                            <div class="map-card-title">Loading Dock</div>
+                        </div>
+                        <div class="map-card" onclick="selectMap(2)">
+                            <canvas id="map-prev-2" width="220" height="140"></canvas>
+                            <div class="map-card-title">Express Lane</div>
+                        </div>
+                        <div class="map-card" onclick="selectMap(4)">
+                            <canvas id="map-prev-4" width="220" height="140"></canvas>
+                            <div class="map-card-title">Cold Storage</div>
+                        </div>
+                        <div class="map-card" onclick="selectMap(5)">
+                            <canvas id="map-prev-5" width="220" height="140"></canvas>
+                            <div class="map-card-title">Zig-Zag Shift</div>
+                        </div>
+                    </div>
+
+                    <button class="nav-arrow">▶</button>
                 </div>
             </div>
         </div>
@@ -250,27 +331,11 @@
             <div class="wood-panel">
                 <button class="btd-btn btn-back" onclick="navTo('screen-maps')">◀ MAPS</button>
                 <h2>Select Difficulty</h2>
-                <div class="selection-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="selection-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 40px;">
                     <button class="card-btn" onclick="selectDiff(0)" style="border-color:#2ecc71;">EASY<span>30 HP | $500 Start</span></button>
                     <button class="card-btn" onclick="selectDiff(1)" style="border-color:#3498db;">MEDIUM<span>20 HP | $400 Start</span></button>
                     <button class="card-btn" onclick="selectDiff(2)" style="border-color:#e74c3c;">HARD<span>10 HP | $300 Start</span></button>
                 </div>
-            </div>
-        </div>
-
-        <div id="screen-coop" class="menu-screen">
-            <div class="wood-panel">
-                <button class="btd-btn btn-back" onclick="navTo('screen-home')">◀ BACK</button>
-                <h2>Co-Op Multiplayer</h2>
-                <div class="coop-input-group">
-                    <button class="btd-btn btn-play" style="font-size: 24px; padding: 15px 30px;" onclick="hostGame()">CREATE MATCH</button>
-                </div>
-                <h3 style="color:#fdf5e6; margin: 20px 0 5px 0;">OR JOIN FRIEND</h3>
-                <div class="coop-input-group">
-                    <input type="text" id="join-id" placeholder="CODE" maxlength="5">
-                    <button class="btd-btn btn-coop" style="font-size: 20px; padding: 10px 20px;" onclick="joinGame()">JOIN</button>
-                </div>
-                <p id="network-status" style="color: #f1c40f; font-weight: bold; margin-top: 20px; font-size: 20px; text-shadow: 2px 2px 0 #000;"></p>
             </div>
         </div>
     </div>
@@ -292,7 +357,12 @@
             </div>
             
             <div id="game-sidebar">
-                
+                <div id="tower-tabs">
+                    <button class="tab-btn active" onclick="setTowerTab('Light')">Light</button>
+                    <button class="tab-btn" onclick="setTowerTab('Heavy')">Heavy</button>
+                    <button class="tab-btn" onclick="setTowerTab('Tech')">Tech</button>
+                    <button class="tab-btn" onclick="setTowerTab('Support')">Supp.</button>
+                </div>
                 <div id="tower-controls"></div>
                 
                 <div id="upgrade-panel">
@@ -303,7 +373,6 @@
                     <div id="upgrade-actions"></div>
                     <button id="sell-btn" class="sell-btn" onclick="sellSelectedTower()">Sell for $0</button>
                 </div>
-
                 <div class="sidebar-bottom">
                     <button id="play-wave-btn" class="play-wave-btn" onclick="startNextWave()">▶</button>
                 </div>
@@ -328,19 +397,19 @@
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
+    let isCoop = false, isHost = true, myPlayerId = Math.random().toString();
     let selectedMapIdx = 0, selectedDiffIdx = 1, selectedHeroIdx = 0;
     const TILE_SIZE = 50;
-    let cardboard = 300, baseHealth = 20, gameOver = false, frameCount = 0, animId = null;
     
-    // Wave & AutoPlay variables
+    let cardboard = 300, baseHealth = 20, gameOver = false, frameCount = 0, animId = null;
     let currentWave = 1, waveActive = false, waveWaiting = true, autoPlay = false;
     let enemiesToSpawn = [], spawnTimer = 0;
-    
     let enemies = [], towers = [], projectiles = [], currentMap = [], currentWaypoints = [], dockPos = {x: 0, y: 0};
     
     let ACTIVE_TOWERS = []; 
     let currentTowerTypeIndex = 0;
     let selectedPlacedTower = null;
+    let currentCategoryTab = 'Light';
 
     // --- RESPONSIVE SCALING LOGIC ---
     function resizeGame() {
@@ -357,13 +426,20 @@
         document.getElementById(screenId).classList.add('active');
     }
 
+    function startSolo() { isCoop = false; isHost = true; navTo('screen-maps'); }
+    function startCoopHost() { isCoop = true; isHost = true; hostPeers = []; navTo('screen-maps'); }
     function setHero(i) {
         selectedHeroIdx = i;
         document.getElementById('hero-btn-0').classList.toggle('active', i === 0);
         document.getElementById('hero-btn-1').classList.toggle('active', i === 1);
     }
     function selectMap(i) { selectedMapIdx = i; navTo('screen-diff'); }
-    function selectDiff(i) { selectedDiffIdx = i; initHostGame(); }
+    function selectDiff(i) { 
+        selectedDiffIdx = i; 
+        if (isCoop && isHost) { setupHostLobby(); navTo('screen-lobby'); document.getElementById('btn-lobby-start').style.display = 'inline-block'; } 
+        else { initHostGame(); }
+    }
+    
     window.toggleSettings = () => {
         const modal = document.getElementById('settings-modal');
         modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
@@ -380,57 +456,85 @@
 
     // --- DATA DEFINITIONS ---
     const HEROES = [
-        { id: 'h0', isHero: true, name: "Foreman Fred", cost: 650, range: 150, damage: 15, cd: 45, color: '#f39c12', pColor: '#e67e22', aoeRadius: 0, type: 'turret',
-          onLevel: (t) => { t.baseDamage += 5; t.baseRange += 5; }
-        },
-        { id: 'h1', isHero: true, name: "Safety Sue", cost: 550, range: 180, damage: 25, cd: 60, color: '#e74c3c', pColor: '#c0392b', aoeRadius: 40, type: 'turret',
-          onLevel: (t) => { t.baseDamage += 8; t.config.aoeRadius += 5; t.baseCd *= 0.95; }
-        }
+        { id: 'h0', isHero: true, cat: 'Hero', name: "Foreman Fred", cost: 650, range: 150, damage: 15, cd: 45, color: '#f39c12', pColor: '#e67e22', aoeRadius: 0, type: 'turret',
+          onLevel: (t) => { t.baseDamage += 5; t.baseRange += 5; } },
+        { id: 'h1', isHero: true, cat: 'Hero', name: "Safety Sue", cost: 550, range: 180, damage: 25, cd: 60, color: '#e74c3c', pColor: '#c0392b', aoeRadius: 40, type: 'turret',
+          onLevel: (t) => { t.baseDamage += 8; t.config.aoeRadius += 5; t.baseCd *= 0.95; } }
     ];
 
+    // 16 Towers Total (4 per category)
     const TOWER_DB = [
-        { id: 't0', name: "Counterbalance", cost: 150, range: 120, damage: 10, cd: 40, color: '#3498db', pColor: '#2980b9', aoeRadius: 0, type: 'turret',
-          paths: [
-            [ { n: "Sharper Forks", c: 100, t: 'dmg', v: 5 }, { n: "Heavy Steel", c: 250, t: 'dmg', v: 10 }, { n: "Titanium Tines", c: 600, t: 'dmg', v: 25 } ],
-            [ { n: "Oiled Gears", c: 150, t: 'cd', v: 0.8 }, { n: "Twin Motor", c: 300, t: 'cd', v: 0.7 }, { n: "Overdrive", c: 900, t: 'cd', v: 0.5 } ],
-            [ { n: "Long Reach", c: 120, t: 'rng', v: 1.2 }, { n: "Eagle Eye", c: 220, t: 'rng', v: 1.3 }, { n: "Scanner", c: 500, t: 'rng', v: 1.5 } ]
-          ]
-        },
-        { id: 't1', name: "Telehandler", cost: 300, range: 140, damage: 15, cd: 80, color: '#e67e22', pColor: '#d35400', aoeRadius: 50, type: 'turret',
-          paths: [
-            [ { n: "Bigger Crates", c: 200, t: 'dmg', v: 10 }, { n: "Lead Weights", c: 400, t: 'dmg', v: 20 }, { n: "Anvil Drop", c: 1200, t: 'dmg', v: 50 } ],
-            [ { n: "Fast Hydraulics", c: 250, t: 'cd', v: 0.85 }, { n: "Auto-Loader", c: 500, t: 'cd', v: 0.75 }, { n: "Rapid Fire", c: 1500, t: 'cd', v: 0.5 } ],
-            [ { n: "Wide Splash", c: 150, t: 'aoe', v: 20 }, { n: "Shockwave", c: 300, t: 'aoe', v: 30 }, { n: "Earthquake", c: 800, t: 'aoe', v: 60 } ]
-          ]
-        },
-        { id: 't2', name: "Pallet Jack", cost: 100, range: 25, damage: 20, cd: 60, color: '#95a5a6', pColor: '#7f8c8d', aoeRadius: 0, type: 'trap',
-          paths: [
-            [ { n: "Spikes", c: 80, t: 'dmg', v: 10 }, { n: "Rusty Nails", c: 150, t: 'dmg', v: 20 }, { n: "Shredder", c: 400, t: 'dmg', v: 40 } ],
-            [ { n: "Greased Wheels", c: 100, t: 'cd', v: 0.8 }, { n: "Motorized", c: 200, t: 'cd', v: 0.7 }, { n: "High-Voltage", c: 600, t: 'cd', v: 0.4 } ],
-            [ { n: "Wider Frame", c: 90, t: 'rng', v: 1.5 }, { n: "Tripwire", c: 180, t: 'rng', v: 1.5 }, { n: "Net Trap", c: 450, t: 'rng', v: 2.0 } ]
-          ]
-        },
-        { id: 't3', name: "Order Picker", cost: 400, range: 600, damage: 30, cd: 100, color: '#2ecc71', pColor: '#27ae60', aoeRadius: 0, type: 'turret',
-          paths: [
-            [ { n: "Hollow Points", c: 200, t: 'dmg', v: 15 }, { n: "Armor Piercing", c: 500, t: 'dmg', v: 30 }, { n: "Depleted Uranium", c: 1500, t: 'dmg', v: 80 } ],
-            [ { n: "Quick Scope", c: 150, t: 'cd', v: 0.8 }, { n: "Auto-Rifle", c: 450, t: 'cd', v: 0.6 }, { n: "Minigun", c: 1800, t: 'cd', v: 0.3 } ],
-            [ { n: "Night Vision", c: 150, t: 'rng', v: 1.2 }, { n: "Thermal", c: 300, t: 'rng', v: 1.5 }, { n: "Satellite", c: 800, t: 'rng', v: 2.0 } ]
-          ]
-        },
-        { id: 't4', name: "Elec. Stacker", cost: 250, range: 60, damage: 5, cd: 20, color: '#f1c40f', pColor: '#f39c12', aoeRadius: 0, type: 'turret',
-          paths: [
-            [ { n: "Sharper Blades", c: 150, t: 'dmg', v: 5 }, { n: "Serrated", c: 300, t: 'dmg', v: 10 }, { n: "Chainsaw", c: 900, t: 'dmg', v: 25 } ],
-            [ { n: "High Voltage", c: 100, t: 'cd', v: 0.8 }, { n: "Lithium Ion", c: 250, t: 'cd', v: 0.7 }, { n: "Supercharger", c: 800, t: 'cd', v: 0.4 } ],
-            [ { n: "Extended Frame", c: 100, t: 'rng', v: 1.3 }, { n: "Wider Arc", c: 200, t: 'rng', v: 1.5 }, { n: "360 Spin", c: 500, t: 'rng', v: 2.0 } ]
-          ]
-        },
-        { id: 't5', name: "Heavy Crane", cost: 600, range: 250, damage: 40, cd: 150, color: '#9b59b6', pColor: '#8e44ad', aoeRadius: 60, type: 'turret',
-          paths: [
-            [ { n: "Heavier Loads", c: 300, t: 'dmg', v: 20 }, { n: "Wrecking Ball", c: 700, t: 'dmg', v: 40 }, { n: "Meteor Drop", c: 2500, t: 'dmg', v: 120 } ],
-            [ { n: "Dual Winch", c: 400, t: 'cd', v: 0.85 }, { n: "Industrial Motor", c: 800, t: 'cd', v: 0.7 }, { n: "Automated Drop", c: 2000, t: 'cd', v: 0.4 } ],
-            [ { n: "Bigger Blast", c: 250, t: 'aoe', v: 20 }, { n: "Shockwave", c: 500, t: 'aoe', v: 40 }, { n: "Crater Maker", c: 1200, t: 'aoe', v: 80 } ]
-          ]
-        }
+        // --- LIGHT ---
+        { id: 'L1', cat: 'Light', name: "Pallet Jack", cost: 100, range: 30, damage: 20, cd: 60, color: '#95a5a6', type: 'trap',
+          paths: [ [{n:"Spikes", c:80, t:'dmg', v:10}, {n:"Rusty", c:150, t:'dmg', v:20}, {n:"Shredder", c:400, t:'dmg', v:40}],
+                   [{n:"Wheels", c:100, t:'cd', v:0.8}, {n:"Motor", c:200, t:'cd', v:0.7}, {n:"HighVolt", c:600, t:'cd', v:0.4}],
+                   [{n:"Frame", c:90, t:'rng', v:1.5}, {n:"Tripwire", c:180, t:'rng', v:1.5}, {n:"Net", c:450, t:'rng', v:2.0}] ]},
+        { id: 'L2', cat: 'Light', name: "Hand Truck", cost: 120, range: 60, damage: 8, cd: 25, color: '#f39c12', type: 'turret',
+          paths: [ [{n:"Metal", c:100, t:'dmg', v:5}, {n:"Heavy", c:200, t:'dmg', v:10}, {n:"Slam", c:450, t:'dmg', v:25}],
+                   [{n:"Oiled", c:120, t:'cd', v:0.8}, {n:"Agile", c:250, t:'cd', v:0.6}, {n:"Blur", c:700, t:'cd', v:0.3}],
+                   [{n:"Long", c:100, t:'rng', v:1.3}, {n:"Reach", c:200, t:'rng', v:1.5}, {n:"Snipe", c:400, t:'rng', v:1.8}] ]},
+        { id: 'L3', cat: 'Light', name: "Counterbalance", cost: 150, range: 120, damage: 10, cd: 40, color: '#3498db', type: 'turret',
+          paths: [ [{n:"Forks", c:100, t:'dmg', v:5}, {n:"Steel", c:250, t:'dmg', v:10}, {n:"Titanium", c:600, t:'dmg', v:25}],
+                   [{n:"Gears", c:150, t:'cd', v:0.8}, {n:"Twin", c:300, t:'cd', v:0.7}, {n:"Overdrive", c:900, t:'cd', v:0.5}],
+                   [{n:"Reach", c:120, t:'rng', v:1.2}, {n:"Eagle", c:220, t:'rng', v:1.3}, {n:"Scanner", c:500, t:'rng', v:1.5}] ]},
+        { id: 'L4', cat: 'Light', name: "Reach Truck", cost: 180, range: 160, damage: 12, cd: 50, color: '#27ae60', type: 'turret',
+          paths: [ [{n:"Piston", c:150, t:'dmg', v:8}, {n:"Impact", c:300, t:'dmg', v:15}, {n:"Crush", c:800, t:'dmg', v:35}],
+                   [{n:"Quick", c:140, t:'cd', v:0.85}, {n:"Rapid", c:280, t:'cd', v:0.7}, {n:"Gatling", c:850, t:'cd', v:0.4}],
+                   [{n:"Mast", c:150, t:'rng', v:1.2}, {n:"Tower", c:350, t:'rng', v:1.4}, {n:"SkyHigh", c:700, t:'rng', v:1.6}] ]},
+        
+        // --- HEAVY ---
+        { id: 'H1', cat: 'Heavy', name: "Telehandler", cost: 300, range: 140, damage: 15, cd: 80, color: '#e67e22', type: 'turret', aoeRadius: 50,
+          paths: [ [{n:"Crates", c:200, t:'dmg', v:10}, {n:"Weights", c:400, t:'dmg', v:20}, {n:"Anvil", c:1200, t:'dmg', v:50}],
+                   [{n:"Hydro", c:250, t:'cd', v:0.85}, {n:"Auto", c:500, t:'cd', v:0.75}, {n:"Rapid", c:1500, t:'cd', v:0.5}],
+                   [{n:"Splash", c:150, t:'aoe', v:20}, {n:"Shock", c:300, t:'aoe', v:30}, {n:"Quake", c:800, t:'aoe', v:60}] ]},
+        { id: 'H2', cat: 'Heavy', name: "Heavy Crane", cost: 600, range: 250, damage: 40, cd: 150, color: '#9b59b6', type: 'turret', aoeRadius: 70,
+          paths: [ [{n:"Loads", c:300, t:'dmg', v:20}, {n:"Wreck", c:700, t:'dmg', v:40}, {n:"Meteor", c:2500, t:'dmg', v:120}],
+                   [{n:"Winch", c:400, t:'cd', v:0.85}, {n:"Motor", c:800, t:'cd', v:0.7}, {n:"Drop", c:2000, t:'cd', v:0.4}],
+                   [{n:"Blast", c:250, t:'aoe', v:20}, {n:"Shock", c:500, t:'aoe', v:40}, {n:"Crater", c:1200, t:'aoe', v:80}] ]},
+        { id: 'H3', cat: 'Heavy', name: "Bulldozer", cost: 450, range: 100, damage: 50, cd: 120, color: '#d35400', type: 'turret',
+          paths: [ [{n:"Blade", c:250, t:'dmg', v:25}, {n:"Spikes", c:600, t:'dmg', v:60}, {n:"Carnage", c:1800, t:'dmg', v:150}],
+                   [{n:"Treads", c:200, t:'cd', v:0.8}, {n:"Engine", c:400, t:'cd', v:0.7}, {n:"V8", c:1200, t:'cd', v:0.5}],
+                   [{n:"Wide", c:150, t:'rng', v:1.2}, {n:"Sweep", c:300, t:'rng', v:1.3}, {n:"Clear", c:700, t:'rng', v:1.5}] ]},
+        { id: 'H4', cat: 'Heavy', name: "Cont. Handler", cost: 850, range: 180, damage: 100, cd: 200, color: '#2c3e50', type: 'turret',
+          paths: [ [{n:"Massive", c:400, t:'dmg', v:50}, {n:"Ton", c:900, t:'dmg', v:100}, {n:"Nuke", c:3000, t:'dmg', v:300}],
+                   [{n:"Hydraulics", c:350, t:'cd', v:0.8}, {n:"Pump", c:700, t:'cd', v:0.7}, {n:"Pneumatic", c:1800, t:'cd', v:0.5}],
+                   [{n:"Boom", c:300, t:'rng', v:1.2}, {n:"Sight", c:600, t:'rng', v:1.4}, {n:"Global", c:1500, t:'rng', v:1.8}] ]},
+        
+        // --- TECH ---
+        { id: 'T1', cat: 'Tech', name: "Order Picker", cost: 350, range: 600, damage: 30, cd: 100, color: '#2ecc71', type: 'turret', canHitFly: true,
+          paths: [ [{n:"Hollow", c:200, t:'dmg', v:15}, {n:"Armor", c:500, t:'dmg', v:30}, {n:"Uranium", c:1500, t:'dmg', v:80}],
+                   [{n:"Scope", c:150, t:'cd', v:0.8}, {n:"Rifle", c:450, t:'cd', v:0.6}, {n:"Minigun", c:1800, t:'cd', v:0.3}],
+                   [{n:"Night", c:150, t:'rng', v:1.2}, {n:"Thermal", c:300, t:'rng', v:1.5}, {n:"Sat", c:800, t:'rng', v:2.0}] ]},
+        { id: 'T2', cat: 'Tech', name: "Elec. Stacker", cost: 250, range: 60, damage: 5, cd: 20, color: '#f1c40f', type: 'turret',
+          paths: [ [{n:"Blades", c:150, t:'dmg', v:5}, {n:"Serrated", c:300, t:'dmg', v:10}, {n:"Chainsaw", c:900, t:'dmg', v:25}],
+                   [{n:"Voltage", c:100, t:'cd', v:0.8}, {n:"Lithium", c:250, t:'cd', v:0.7}, {n:"Super", c:800, t:'cd', v:0.4}],
+                   [{n:"Frame", c:100, t:'rng', v:1.3}, {n:"Arc", c:200, t:'rng', v:1.5}, {n:"360", c:500, t:'rng', v:2.0}] ]},
+        { id: 'T3', cat: 'Tech', name: "Drone Station", cost: 400, range: 180, damage: 8, cd: 15, color: '#ecf0f1', type: 'turret', canHitFly: true,
+          paths: [ [{n:"Rotors", c:200, t:'dmg', v:5}, {n:"Blades", c:450, t:'dmg', v:12}, {n:"Missiles", c:1400, t:'dmg', v:35}],
+                   [{n:"Swarm", c:250, t:'cd', v:0.7}, {n:"Hive", c:600, t:'cd', v:0.6}, {n:"Legion", c:1600, t:'cd', v:0.3}],
+                   [{n:"Radar", c:180, t:'rng', v:1.3}, {n:"Sonar", c:400, t:'rng', v:1.5}, {n:"AWACS", c:1000, t:'rng', v:2.0}] ]},
+        { id: 'T4', cat: 'Tech', name: "AGV Laser", cost: 500, range: 150, damage: 15, cd: 30, color: '#34495e', type: 'turret',
+          paths: [ [{n:"Focus", c:300, t:'dmg', v:10}, {n:"Plasma", c:700, t:'dmg', v:25}, {n:"DeathRay", c:2200, t:'dmg', v:80}],
+                   [{n:"Optics", c:250, t:'cd', v:0.8}, {n:"Prism", c:600, t:'cd', v:0.6}, {n:"Lightspeed", c:1800, t:'cd', v:0.3}],
+                   [{n:"Lenses", c:200, t:'rng', v:1.3}, {n:"Mirrors", c:450, t:'rng', v:1.5}, {n:"Satellite", c:1100, t:'rng', v:2.0}] ]},
+
+        // --- SUPPORT ---
+        { id: 'S1', cat: 'Support', name: "Foreman Desk", cost: 250, range: 120, damage: 0, cd: 999, color: '#8b5a2b', type: 'aura', aura: 'range',
+          paths: [ [{n:"Radio", c:200, t:'rng', v:1.2}, {n:"PA Sys", c:400, t:'rng', v:1.5}, {n:"Network", c:1000, t:'rng', v:2.0}],
+                   [{n:"-", c:9999, t:'cd', v:1}, {n:"-", c:9999, t:'cd', v:1}, {n:"-", c:9999, t:'cd', v:1}],
+                   [{n:"-", c:9999, t:'dmg', v:0}, {n:"-", c:9999, t:'dmg', v:0}, {n:"-", c:9999, t:'dmg', v:0}] ]},
+        { id: 'S2', cat: 'Support', name: "Coffee Mach.", cost: 300, range: 100, damage: 0, cd: 999, color: '#ecf0f1', type: 'aura', aura: 'cd',
+          paths: [ [{n:"Espresso", c:250, t:'rng', v:1.2}, {n:"Energy", c:500, t:'rng', v:1.4}, {n:"Nitro", c:1200, t:'rng', v:1.8}],
+                   [{n:"-", c:9999, t:'cd', v:1}, {n:"-", c:9999, t:'cd', v:1}, {n:"-", c:9999, t:'cd', v:1}],
+                   [{n:"-", c:9999, t:'dmg', v:0}, {n:"-", c:9999, t:'dmg', v:0}, {n:"-", c:9999, t:'dmg', v:0}] ]},
+        { id: 'S3', cat: 'Support', name: "Security Cam", cost: 350, range: 150, damage: 0, cd: 999, color: '#7f8c8d', type: 'aura', aura: 'detectFly',
+          paths: [ [{n:"Zoom", c:200, t:'rng', v:1.2}, {n:"Pan", c:450, t:'rng', v:1.5}, {n:"Global", c:1100, t:'rng', v:2.0}],
+                   [{n:"-", c:9999, t:'cd', v:1}, {n:"-", c:9999, t:'cd', v:1}, {n:"-", c:9999, t:'cd', v:1}],
+                   [{n:"-", c:9999, t:'dmg', v:0}, {n:"-", c:9999, t:'dmg', v:0}, {n:"-", c:9999, t:'dmg', v:0}] ]},
+        { id: 'S4', cat: 'Support', name: "Card. Baler", cost: 500, range: 0, damage: 0, cd: 180, color: '#d35400', type: 'income', moneyGen: 25,
+          paths: [ [{n:"Big Bales", c:300, t:'money', v:15}, {n:"Dense", c:700, t:'money', v:40}, {n:"Factory", c:2000, t:'money', v:120}],
+                   [{n:"Fast Pack", c:400, t:'cd', v:0.8}, {n:"Auto", c:800, t:'cd', v:0.7}, {n:"Overdrive", c:2500, t:'cd', v:0.4}],
+                   [{n:"-", c:9999, t:'rng', v:1}, {n:"-", c:9999, t:'rng', v:1}, {n:"-", c:9999, t:'rng', v:1}] ]}
     ];
 
     const ENEMY_TYPES = {
@@ -449,50 +553,106 @@
         { grid: [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]], wp: [{x:-25,y:25}, {x:725,y:25}, {x:725,y:125}, {x:75,y:125}, {x:75,y:225}, {x:725,y:225}, {x:725,y:325}, {x:75,y:325}, {x:75,y:425}, {x:825,y:425}] }
     ];
 
-    // --- NETCODE ---
-    let peer = null, networkConn = null, isHost = true, clientRenderState = null;
+    window.onload = () => { drawMapThumbnails(); }
+    function drawMapThumbnails() {
+        MAPS_DATA.forEach((m, i) => {
+            let cvs = document.getElementById('map-prev-' + i);
+            if(!cvs) return;
+            let ctx = cvs.getContext('2d');
+            let sz = 220 / 16;
+            ctx.clearRect(0,0,220,140);
+            for(let r=0; r<11; r++) {
+                for(let c=0; c<16; c++) {
+                    if(m.grid[r] && m.grid[r][c] === 1) { ctx.fillStyle='#ecf0f1'; ctx.fillRect(c*sz, r*sz, sz, sz); }
+                }
+            }
+            if(m.wp && m.wp.length > 0) {
+                let last = m.wp[m.wp.length-1];
+                ctx.fillStyle='#e74c3c'; ctx.fillRect(Math.floor(last.x/50)*sz, Math.floor(last.y/50)*sz, sz, sz);
+            }
+        });
+    }
 
-    function hostGame() {
+    // --- NETCODE ---
+    let peer = null, hostPeers = [], networkConn = null;
+
+    function setupHostLobby() {
         const code = Math.random().toString(36).substring(2, 7).toUpperCase();
         peer = new Peer('pallet-' + code);
-        peer.on('open', () => { document.getElementById('network-status').innerText = "Match Code: " + code + " (Waiting for P2)"; });
-        peer.on('connection', conn => { networkConn = conn; document.getElementById('network-status').innerText = "P2 Joined! Navigating to Map Select..."; setTimeout(() => navTo('screen-maps'), 1500); setupNet(); });
+        peer.on('open', () => { 
+            document.getElementById('lobby-code-display').innerText = "Match Code: " + code; 
+            updateLobbyUI();
+        });
+        peer.on('connection', conn => {
+            if (hostPeers.length >= 3) { conn.send({type: 'FULL'}); setTimeout(() => conn.close(), 500); return; }
+            hostPeers.push(conn);
+            updateLobbyUI();
+            
+            conn.on('data', d => {
+                if (d.type === 'BUILD') attemptBuild(d.x, d.y, d.cIdx, d.owner);
+                else if (d.type === 'SELL') executeSell(d.x, d.y);
+                else if (d.type === 'START_WAVE') startNextWave(); 
+                else if (d.type === 'UPGRADE') { const t = towers.find(tw => tw.gridX === d.x && tw.gridY === d.y); if (t) { selectedPlacedTower = t; upgradeTowerPath(d.pIdx); selectedPlacedTower = null; } }
+            });
+            conn.on('close', () => { hostPeers = hostPeers.filter(p => p !== conn); updateLobbyUI(); });
+        });
+    }
+
+    function updateLobbyUI() {
+        if (!isHost) return;
+        let count = hostPeers.length + 1;
+        let html = `<div class="card-btn active">Player 1 (Host)</div>`;
+        for(let i=1; i<4; i++) {
+            if (i < count) html += `<div class="card-btn active" style="border-color:#3498db; background:#ebf5fb;">Player ${i+1} Joined!</div>`;
+            else html += `<div class="card-btn">Waiting...</div>`;
+        }
+        document.getElementById('lobby-players').innerHTML = html;
+        hostPeers.forEach(p => p.send({type: 'LOBBY_SYNC', count: count}));
     }
 
     function joinGame() {
         const code = document.getElementById('join-id').value.toUpperCase().trim();
         if(code.length !== 5) return alert("Enter 5-letter code!");
-        isHost = false; document.getElementById('network-status').innerText = "Connecting...";
+        isHost = false; document.getElementById('join-status').innerText = "Connecting...";
         peer = new Peer();
         peer.on('open', () => {
             networkConn = peer.connect('pallet-' + code);
-            networkConn.on('open', () => { document.getElementById('network-status').innerText = "Connected! Waiting for Host to select map..."; setupNet(); });
-        });
-    }
-
-    function setupNet() {
-        networkConn.on('data', d => {
-            if (isHost) {
-                if (d.type === 'BUILD') attemptBuild(d.x, d.y, d.cIdx, false);
-                else if (d.type === 'SELL') executeSell(d.x, d.y);
-                else if (d.type === 'START_WAVE') startNextWave(); 
-                else if (d.type === 'UPGRADE') { const t = towers.find(tw => tw.gridX === d.x && tw.gridY === d.y); if (t) { selectedPlacedTower = t; upgradeTowerPath(d.pIdx); selectedPlacedTower = null; } }
-            } else {
-                if (d.type === 'START') {
-                    currentMap = d.map; currentWaypoints = d.wp; dockPos = d.dock; ACTIVE_TOWERS = d.towers; 
-                    showGameUI(); gameLoop(); 
-                } else if (d.type === 'SYNC') {
-                    cardboard = d.cb; baseHealth = d.hp; currentWave = d.wave; 
-                    waveActive = d.wAct; waveWaiting = d.wWait;
-                    clientRenderState = d; updateTopUI();
-                }
-            }
+            networkConn.on('open', () => { 
+                navTo('screen-lobby');
+                document.getElementById('lobby-code-display').innerText = "Joined: " + code;
+                document.getElementById('lobby-players').innerHTML = "<div class='card-btn active'>Waiting for Host...</div>";
+                document.getElementById('btn-lobby-start').style.display = 'none';
+                
+                networkConn.on('data', d => {
+                    if (d.type === 'FULL') { alert("Lobby is full!"); navTo('screen-coop'); }
+                    else if (d.type === 'LOBBY_SYNC') {
+                        let html = `<div class="card-btn active">Player 1 (Host)</div>`;
+                        for(let i=1; i<4; i++) {
+                            if (i < d.count) html += `<div class="card-btn active" style="border-color:#3498db; background:#ebf5fb;">Player ${i+1} Joined!</div>`;
+                            else html += `<div class="card-btn">Waiting...</div>`;
+                        }
+                        document.getElementById('lobby-players').innerHTML = html;
+                    }
+                    else if (d.type === 'START') {
+                        currentMap = d.map; currentWaypoints = d.wp; dockPos = d.dock; ACTIVE_TOWERS = d.towers; 
+                        showGameUI(); gameLoop(); 
+                    } 
+                    else if (d.type === 'SYNC') {
+                        cardboard = d.cb; baseHealth = d.hp; currentWave = d.wave; 
+                        waveActive = d.wAct; waveWaiting = d.wWait;
+                        clientRenderState = d; 
+                        updateTopUI(); 
+                    }
+                });
+            });
         });
     }
 
     // --- START SEQUENCE ---
     function initHostGame() {
         if (!isHost) return;
+        if(animId) cancelAnimationFrame(animId);
+        
         currentMap = JSON.parse(JSON.stringify(MAPS_DATA[selectedMapIdx].grid));
         currentWaypoints = JSON.parse(JSON.stringify(MAPS_DATA[selectedMapIdx].wp));
         dockPos = { gridX: Math.floor(currentWaypoints[currentWaypoints.length - 1].x/TILE_SIZE), gridY: Math.floor(currentWaypoints[currentWaypoints.length - 1].y/TILE_SIZE) };
@@ -501,7 +661,11 @@
         baseHealth = diff.hp; cardboard = diff.cash;
         
         ACTIVE_TOWERS = [ HEROES[selectedHeroIdx], ...JSON.parse(JSON.stringify(TOWER_DB)) ];
-        if (networkConn && networkConn.open) networkConn.send({ type: 'START', map: currentMap, wp: currentWaypoints, dock: dockPos, towers: ACTIVE_TOWERS });
+        
+        if (isCoop && hostPeers.length > 0) {
+            let safeTowers = JSON.parse(JSON.stringify(ACTIVE_TOWERS));
+            hostPeers.forEach(p => p.send({ type: 'START', map: currentMap, wp: currentWaypoints, dock: dockPos, towers: safeTowers }));
+        }
 
         showGameUI();
         updateTopUI(); gameLoop();
@@ -515,14 +679,32 @@
     }
 
     // --- SIDEBAR UI LOGIC ---
+    window.setTowerTab = (tab) => {
+        currentCategoryTab = tab;
+        document.querySelectorAll('.tab-btn').forEach(b => {
+            b.classList.toggle('active', b.innerText.includes(tab) || (tab==='Support' && b.innerText==='Supp.'));
+        });
+        buildTowerUI();
+    };
+
     function buildTowerUI() {
         const tc = document.getElementById('tower-controls'); tc.innerHTML = "";
-        const ICONS = { 'h0': '👷‍♂️', 'h1': '🦺', 't0': '🚜', 't1': '🏗️', 't2': '🛼', 't3': '🛒', 't4': '🔋', 't5': '🚧' };
+        const ICONS = { 
+            'h0': '👷‍♂️', 'h1': '🦺', 
+            'L1': '🛼', 'L2': '🛒', 'L3': '🚜', 'L4': '🏗️',
+            'H1': '🚛', 'H2': '🏗️', 'H3': '🚜', 'H4': '🚢',
+            'T1': '🎯', 'T2': '⚡', 'T3': '🚁', 'T4': '🤖',
+            'S1': '📋', 'S2': '☕', 'S3': '📹', 'S4': '📦'
+        };
 
-        ACTIVE_TOWERS.forEach((t, i) => {
+        // FIND ALL TOWERS IN THIS TAB AND RENDER THEM
+        // Pass their ABSOLUTE index in the master ACTIVE_TOWERS array!
+        ACTIVE_TOWERS.forEach((t, absoluteIndex) => {
+            if (!t.isHero && t.cat !== currentCategoryTab) return; 
+
             let borderCol = t.isHero ? '#27ae60' : '#deb887';
             tc.innerHTML += `
-                <div class="tower-card ${i===currentTowerTypeIndex ? 'active' : ''}" style="border-color:${i===currentTowerTypeIndex ? '#2ecc71' : borderCol}" onclick="selectTowerType(${i})">
+                <div class="tower-card-ui ${absoluteIndex===currentTowerTypeIndex ? 'active' : ''}" style="border-color:${absoluteIndex===currentTowerTypeIndex ? '#2ecc71' : borderCol}" onclick="selectTowerType(${absoluteIndex})">
                     <div class="tower-card-name">${t.name}</div>
                     <div class="tower-color-block" style="background:${t.color};">
                         <span style="font-size: 22px; text-shadow:none;">${ICONS[t.id] || ''}</span>
@@ -578,22 +760,33 @@
 
     // --- GAME ENGINE ---
     class Tower {
-        constructor(gx, gy, conf, isLocalOwner) {
+        constructor(gx, gy, conf, ownerId) {
             this.gridX = gx; this.gridY = gy; this.x = (gx*TILE_SIZE)+25; this.y = (gy*TILE_SIZE)+25;
-            this.config = JSON.parse(JSON.stringify(conf)); this.isHero = conf.isHero; this.owner = isLocalOwner;
+            this.config = JSON.parse(JSON.stringify(conf)); this.isHero = conf.isHero; this.owner = ownerId;
             this.baseRange = conf.range; this.baseDamage = conf.damage; this.baseCd = conf.cd;
             this.range = this.baseRange; this.damage = this.baseDamage; this.cd = this.baseCd;
             this.timer = 0; this.angle = 0; this.upgrades = [0, 0, 0]; this.level = 1; this.xp = 0;
+            this.canHitFly = conf.canHitFly || false;
+            this.moneyGen = conf.moneyGen || 0;
         }
         update() {
             if (this.timer > 0) this.timer--;
-            if (this.isHero && this.config.id === 'h0') { for (let t of towers) { if (t !== this && Math.hypot(t.x-this.x, t.y-this.y) <= this.range) t.cd *= (0.95 - (this.level*0.01)); } }
+            
+            // Support Money Gen
+            if (this.config.type === 'income') {
+                if (this.timer === 0) {
+                    if (isHost && this.moneyGen > 0) { cardboard += this.moneyGen; updateTopUI(); }
+                    this.timer = this.cd;
+                }
+                return; // Do not attack
+            }
+            if (this.config.type === 'aura') return; // Do not attack
 
             let tgt = null; let minD = Infinity;
             for (let e of enemies) {
                 const d = Math.hypot(e.x - this.x, e.y - this.y);
                 if (this.config.type === 'trap' && d < this.range && this.timer === 0 && !e.fly) { e.hp -= this.damage; this.timer = this.cd; } 
-                else if (this.config.type === 'turret' && d < this.range && d < minD && !e.fly) { minD = d; tgt = e; }
+                else if (this.config.type === 'turret' && d < this.range && d < minD && (!e.fly || this.canHitFly)) { minD = d; tgt = e; }
             }
             if (tgt && this.config.type === 'turret') {
                 this.angle = Math.atan2(tgt.y - this.y, tgt.x - this.x);
@@ -637,13 +830,16 @@
     };
 
     function upgradeTowerPath(pIdx) {
-        const t = selectedPlacedTower;
+        const t = selectedPlacedTower; 
+        if (!t) return;
         if (!canUpgradePath(t, pIdx)) return;
+
         const upgDef = t.config.paths[pIdx][t.upgrades[pIdx]];
         if (cardboard >= upgDef.c) {
             cardboard -= upgDef.c; t.upgrades[pIdx]++;
             if(upgDef.t === 'dmg') t.baseDamage += upgDef.v; if(upgDef.t === 'cd') t.baseCd *= upgDef.v;
             if(upgDef.t === 'rng') t.baseRange *= upgDef.v; if(upgDef.t === 'aoe') t.config.aoeRadius += upgDef.v;
+            if(upgDef.t === 'money') t.moneyGen += upgDef.v;
             t.damage = t.baseDamage; t.cd = t.baseCd; t.range = t.baseRange;
             updateUpgradeUI(); updateTopUI();
         }
@@ -669,12 +865,16 @@
     function updateUpgradeUI() {
         const tc = document.getElementById('tower-controls');
         const up = document.getElementById('upgrade-panel');
-        const info = document.getElementById('upgrade-info'); 
         const acts = document.getElementById('upgrade-actions');
         
-        if (!selectedPlacedTower) { tc.style.display = 'grid'; up.style.display = 'none'; return; }
+        if (!selectedPlacedTower) { 
+            tc.style.display = 'grid'; up.style.display = 'none'; 
+            document.getElementById('tower-tabs').style.display = 'flex';
+            return; 
+        }
         
         tc.style.display = 'none'; up.style.display = 'flex';
+        document.getElementById('tower-tabs').style.display = 'none';
 
         const t = selectedPlacedTower;
         document.getElementById('upgrade-title').innerText = t.isHero ? `⭐ ${t.config.name}` : t.config.name;
@@ -731,21 +931,40 @@
 
         let clickedTower = isHost ? towers.find(t => t.gridX === gX && t.gridY === gY) : (clientRenderState ? clientRenderState.t.find(t => t.gridX === gX && t.gridY === gY) : null);
         
-        if (clickedTower) { selectedPlacedTower = clickedTower; updateUpgradeUI(); return; }
+        if (!isHost && clickedTower) {
+            let config = ACTIVE_TOWERS.find(c => c.id === clickedTower.id);
+            if (config) {
+                selectedPlacedTower = {
+                    gridX: clickedTower.gridX, gridY: clickedTower.gridY,
+                    config: config, isHero: clickedTower.isHero, upgrades: clickedTower.upgrades || [0,0,0],
+                    damage: clickedTower.damage, range: clickedTower.range, level: clickedTower.level || 1, xp: clickedTower.xp || 0
+                };
+                updateUpgradeUI();
+                return;
+            }
+        } else if (clickedTower) { 
+            selectedPlacedTower = clickedTower; 
+            updateUpgradeUI(); 
+            return; 
+        }
+
         if (selectedPlacedTower) { deselectTower(); return; }
 
-        if (isHost) attemptBuild(gX, gY, currentTowerTypeIndex, true);
-        else networkConn.send({ type: 'BUILD', x: gX, y: gY, cIdx: currentTowerTypeIndex });
+        if (isHost) attemptBuild(gX, gY, currentTowerTypeIndex, myPlayerId);
+        else networkConn.send({ type: 'BUILD', x: gX, y: gY, cIdx: currentTowerTypeIndex, owner: myPlayerId });
     });
 
-    function attemptBuild(gx, gy, cIdx, isLocal) {
+    // BUG FIXED: cIdx is now absolute!
+    function attemptBuild(gx, gy, cIdx, ownerId) {
         const conf = ACTIVE_TOWERS[cIdx];
-        if (conf.isHero && towers.filter(t => t.config.id === conf.id && t.owner === isLocal).length >= 1) return;
+        if (!conf) return; 
+
+        if (conf.isHero && towers.filter(t => t.config.id === conf.id && t.owner === ownerId).length >= 1) return;
         
         const onPath = currentMap[gy][gx] === 1; const onEmpty = currentMap[gy][gx] === 0;
         if ((conf.type === 'trap' && onPath) || (conf.type !== 'trap' && onEmpty)) {
             if (cardboard >= conf.cost) {
-                towers.push(new Tower(gx, gy, conf, isLocal)); currentMap[gy][gx] = 2; 
+                towers.push(new Tower(gx, gy, conf, ownerId)); currentMap[gy][gx] = 2; 
                 cardboard -= conf.cost; updateTopUI(); selectedPlacedTower = null; updateUpgradeUI();
             }
         }
@@ -763,63 +982,89 @@
         ctx.fillStyle = 'white'; ctx.font = '14px "Fredoka One"'; ctx.fillText("DOCK", dockPos.gridX*TILE_SIZE + 5, dockPos.gridY*TILE_SIZE + 30);
     }
 
-    // DISTINCT FORKLIFT ART
     function drawEntities(tList, eList, pList) {
-        if(selectedPlacedTower) { ctx.fillStyle='rgba(236,240,241,0.3)'; ctx.beginPath(); ctx.arc((selectedPlacedTower.gridX*TILE_SIZE)+25, (selectedPlacedTower.gridY*TILE_SIZE)+25, selectedPlacedTower.range || selectedPlacedTower.rng, 0, Math.PI*2); ctx.fill(); }
-        
-        for (let t of tList) {
-            ctx.save(); ctx.translate(t.x || (t.gridX*TILE_SIZE)+25, t.y || (t.gridY*TILE_SIZE)+25);
-            if (t.config?.type !== 'aura') ctx.rotate(t.angle || t.a || 0);
-
-            let typeId = t.config?.id || t.id;
-            let color = t.config?.color || t.c;
-
-            if (t.isHero || t.h) {
-                ctx.fillStyle = color; ctx.beginPath(); ctx.arc(0,0, 18, 0, Math.PI*2); ctx.fill();
-                ctx.fillStyle = '#2c3e50'; ctx.fillRect(-8,-8, 16,16);
-                ctx.fillStyle = '#f1c40f'; ctx.font="14px Arial"; ctx.fillText("⭐", -8, 5);
-            } else if (typeId === 't0') { // Counterbalance
-                ctx.fillStyle = color; ctx.fillRect(-15, -15, 30, 30);
-                ctx.fillStyle = '#bdc3c7'; ctx.fillRect(15, -10, 15, 4); ctx.fillRect(15, 6, 15, 4); // Forks
-                ctx.fillStyle = '#2c3e50'; ctx.fillRect(-5, -10, 10, 20); // Cab
-            } else if (typeId === 't1') { // Telehandler
-                ctx.fillStyle = color; ctx.fillRect(-18, -12, 36, 24);
-                ctx.fillStyle = '#e67e22'; ctx.fillRect(-10, -5, 35, 10); // Boom arm
-                ctx.fillStyle = '#2c3e50'; ctx.fillRect(0, -10, 12, 10); // Cab offset
-            } else if (typeId === 't2') { // Pallet Jack
-                ctx.fillStyle = color; ctx.fillRect(-10, -8, 20, 16);
-                ctx.fillStyle = '#7f8c8d'; ctx.fillRect(10, -6, 12, 3); ctx.fillRect(10, 3, 12, 3); // Small forks
-                ctx.fillStyle = 'black'; ctx.fillRect(-15, -2, 5, 4); // Handle
-            } else if (typeId === 't3') { // Order Picker
-                ctx.fillStyle = color; ctx.fillRect(-12, -15, 24, 30);
-                ctx.fillStyle = '#f1c40f'; ctx.beginPath(); ctx.arc(5, 0, 8, 0, Math.PI*2); ctx.fill(); // Operator cage
-                ctx.strokeStyle = '#2c3e50'; ctx.lineWidth = 2; ctx.stroke();
-            } else if (typeId === 't4') { // Electric Stacker
-                ctx.fillStyle = color; ctx.fillRect(-15, -12, 20, 24);
-                ctx.fillStyle = '#ecf0f1'; ctx.fillRect(5, -10, 5, 20); // Mast
-                ctx.fillStyle = '#95a5a6'; ctx.fillRect(10, -8, 10, 4); ctx.fillRect(10, 4, 10, 4); // Forks
-            } else if (typeId === 't5') { // Heavy Crane
-                ctx.fillStyle = color; ctx.beginPath(); ctx.arc(0,0, 20, 0, Math.PI*2); ctx.fill();
-                ctx.fillStyle = '#2c3e50'; ctx.fillRect(0, -6, 40, 12); // Crane arm
-                ctx.fillStyle = '#e74c3c'; ctx.beginPath(); ctx.arc(40, 0, 6, 0, Math.PI*2); ctx.fill(); // Wrecking ball
-            } else {
-                ctx.fillStyle = color; ctx.fillRect(-15, -15, 30, 30); ctx.fillStyle = '#2c3e50'; ctx.fillRect(-5, -5, 10, 10);
+        try {
+            if(selectedPlacedTower) { 
+                ctx.fillStyle='rgba(236,240,241,0.3)'; ctx.beginPath(); 
+                ctx.arc((selectedPlacedTower.gridX*TILE_SIZE)+25, (selectedPlacedTower.gridY*TILE_SIZE)+25, selectedPlacedTower.range || 100, 0, Math.PI*2); 
+                ctx.fill(); 
             }
+            
+            if (!tList) tList = [];
+            for (let t of tList) {
+                ctx.save();
+                try {
+                    let typeId = isHost ? t.config.id : t.id;
+                    let config = isHost ? t.config : ACTIVE_TOWERS.find(c => c.id === typeId);
+                    if (!config) { ctx.restore(); continue; }
 
-            let upgs = t.upgrades || t.u;
-            if (upgs) {
-                let maxT = Math.max(...upgs); ctx.fillStyle = '#2ecc71';
-                if (maxT >= 1) ctx.fillRect(-15, -15, 4, 10); if (maxT >= 2) ctx.fillRect(-15, -5, 4, 10); if (maxT >= 3) ctx.fillRect(-15, 5, 4, 10);
+                    ctx.translate((t.gridX*TILE_SIZE)+25, (t.gridY*TILE_SIZE)+25);
+                    if (config.type !== 'aura' && config.type !== 'income') ctx.rotate(t.angle || t.a || 0);
+
+                    let color = config.color || '#fff';
+                    let isHero = isHost ? t.isHero : t.isHero;
+
+                    if (isHero) {
+                        ctx.fillStyle = color; ctx.beginPath(); ctx.arc(0,0, 18, 0, Math.PI*2); ctx.fill();
+                        ctx.fillStyle = '#2c3e50'; ctx.fillRect(-8,-8, 16,16);
+                        ctx.fillStyle = '#f1c40f'; ctx.font="14px Arial"; ctx.fillText("⭐", -8, 5);
+                    } else if (typeId === 'L1' || typeId === 't2') { // Pallet Jack
+                        ctx.fillStyle = color; ctx.fillRect(-10, -8, 20, 16);
+                        ctx.fillStyle = '#7f8c8d'; ctx.fillRect(10, -6, 12, 3); ctx.fillRect(10, 3, 12, 3); 
+                        ctx.fillStyle = 'black'; ctx.fillRect(-15, -2, 5, 4); 
+                    } else if (typeId === 'L3' || typeId === 't0') { // Counterbalance
+                        ctx.fillStyle = color; ctx.fillRect(-15, -15, 30, 30);
+                        ctx.fillStyle = '#bdc3c7'; ctx.fillRect(15, -10, 15, 4); ctx.fillRect(15, 6, 15, 4); 
+                        ctx.fillStyle = '#2c3e50'; ctx.fillRect(-5, -10, 10, 20); 
+                    } else if (typeId === 'H1' || typeId === 't1') { // Telehandler
+                        ctx.fillStyle = color; ctx.fillRect(-18, -12, 36, 24);
+                        ctx.fillStyle = '#e67e22'; ctx.fillRect(-10, -5, 35, 10); 
+                        ctx.fillStyle = '#2c3e50'; ctx.fillRect(0, -10, 12, 10); 
+                    } else if (typeId === 'T1' || typeId === 't3') { // Order Picker
+                        ctx.fillStyle = color; ctx.fillRect(-12, -15, 24, 30);
+                        ctx.fillStyle = '#f1c40f'; ctx.beginPath(); ctx.arc(5, 0, 8, 0, Math.PI*2); ctx.fill(); 
+                        ctx.strokeStyle = '#2c3e50'; ctx.lineWidth = 2; ctx.stroke();
+                    } else if (typeId === 'T2' || typeId === 't4') { // Elec Stacker
+                        ctx.fillStyle = color; ctx.fillRect(-15, -12, 20, 24);
+                        ctx.fillStyle = '#ecf0f1'; ctx.fillRect(5, -10, 5, 20); 
+                        ctx.fillStyle = '#95a5a6'; ctx.fillRect(10, -8, 10, 4); ctx.fillRect(10, 4, 10, 4); 
+                    } else if (typeId === 'H2' || typeId === 't5') { // Heavy Crane
+                        ctx.fillStyle = color; ctx.beginPath(); ctx.arc(0,0, 20, 0, Math.PI*2); ctx.fill();
+                        ctx.fillStyle = '#2c3e50'; ctx.fillRect(0, -6, 40, 12); 
+                        ctx.fillStyle = '#e74c3c'; ctx.beginPath(); ctx.arc(40, 0, 6, 0, Math.PI*2); ctx.fill(); 
+                    } else if (typeId === 'S4') { // Baler
+                        ctx.fillStyle = color; ctx.fillRect(-20, -20, 40, 40);
+                        ctx.fillStyle = '#e67e22'; ctx.fillRect(-15, -15, 30, 30); 
+                    } else if (typeId === 'S3') { // Cam
+                        ctx.fillStyle = color; ctx.beginPath(); ctx.arc(0,0, 15, 0, Math.PI*2); ctx.fill();
+                        ctx.fillStyle = 'red'; ctx.beginPath(); ctx.arc(0,0, 5, 0, Math.PI*2); ctx.fill();
+                    } else { // Generic
+                        ctx.fillStyle = color; ctx.fillRect(-15, -15, 30, 30); ctx.fillStyle = '#2c3e50'; ctx.fillRect(-5, -5, 10, 10);
+                    }
+
+                    let upgs = t.upgrades || t.u || [0,0,0];
+                    if (Array.isArray(upgs) && upgs.length > 0) {
+                        let maxT = Math.max(...upgs); 
+                        ctx.fillStyle = '#2ecc71';
+                        if (maxT >= 1) ctx.fillRect(-15, -15, 4, 10); 
+                        if (maxT >= 2) ctx.fillRect(-15, -5, 4, 10); 
+                        if (maxT >= 3) ctx.fillRect(-15, 5, 4, 10);
+                    }
+                } catch(err) {}
+                ctx.restore();
             }
-            ctx.restore();
-        }
-        for (let p of pList) { ctx.fillStyle = p.c; ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI*2); ctx.fill(); }
-        for (let e of eList) {
-            ctx.fillStyle = e.color || e.c; ctx.beginPath(); ctx.arc(e.x, e.y, e.rad || e.r, 0, Math.PI * 2); ctx.fill();
-            if (e.fly) { ctx.strokeStyle = 'white'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(e.x-10, e.y-10); ctx.lineTo(e.x+10, e.y+10); ctx.stroke(); ctx.beginPath(); ctx.moveTo(e.x+10, e.y-10); ctx.lineTo(e.x-10, e.y+10); ctx.stroke(); } 
-            else { ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.lineWidth=2; ctx.stroke(); }
-            ctx.lineWidth=1; ctx.fillStyle = 'black'; ctx.fillRect(e.x - 11, e.y - 21, 22, 6); ctx.fillStyle = 'red'; ctx.fillRect(e.x - 10, e.y - 20, 20, 4); ctx.fillStyle = '#2ecc71'; ctx.fillRect(e.x - 10, e.y - 20, 20 * Math.max(0, (e.hp||0) / (e.maxHp||1)), 4);
-        }
+            
+            if (!pList) pList = [];
+            for (let p of pList) { ctx.fillStyle = p.c || '#fff'; ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI*2); ctx.fill(); }
+            
+            if (!eList) eList = [];
+            for (let e of eList) {
+                ctx.fillStyle = e.color || '#e74c3c'; ctx.beginPath(); ctx.arc(e.x, e.y, e.rad || 10, 0, Math.PI * 2); ctx.fill();
+                if (e.fly) { ctx.strokeStyle = 'white'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(e.x-10, e.y-10); ctx.lineTo(e.x+10, e.y+10); ctx.stroke(); ctx.beginPath(); ctx.moveTo(e.x+10, e.y-10); ctx.lineTo(e.x-10, e.y+10); ctx.stroke(); } 
+                else { ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.lineWidth=2; ctx.stroke(); }
+                ctx.lineWidth=1; ctx.fillStyle = 'black'; ctx.fillRect(e.x - 11, e.y - 21, 22, 6); ctx.fillStyle = 'red'; ctx.fillRect(e.x - 10, e.y - 20, 20, 4); ctx.fillStyle = '#2ecc71'; ctx.fillRect(e.x - 10, e.y - 20, 20 * Math.max(0, (e.hp||0) / (e.maxHp||1)), 4);
+            }
+        } catch(err) {}
     }
 
     function gameLoop() {
@@ -844,14 +1089,27 @@
                 waveActive = false; waveWaiting = true; currentWave++; cardboard += 50 + (currentWave * 10); 
                 towers.forEach(t => t.addXp(100 + (currentWave*20))); updateTopUI(); if(selectedPlacedTower) updateUpgradeUI();
                 
-                // AUTO PLAY LOGIC
-                if (autoPlay && isHost) {
-                    setTimeout(() => { if(autoPlay && waveWaiting) startNextWave(); }, 1500);
+                if (autoPlay && isHost) { setTimeout(() => { if(autoPlay && waveWaiting) startNextWave(); }, 1500); }
+            }
+        }
+
+        // RESET Base Stats before Auras
+        for (let t of towers) { t.damage = t.baseDamage; t.cd = t.baseCd; t.range = t.baseRange; t.canHitFly = t.config.canHitFly || false; }
+        
+        // APPLY Auras
+        for (let t of towers) {
+            if (t.isHero && t.config.id === 'h0') { for (let ot of towers) if (ot !== t && Math.hypot(ot.x-t.x, ot.y-t.y) <= t.range) ot.cd *= (0.95 - (t.level*0.01)); }
+            if (t.config.aura) {
+                for (let ot of towers) {
+                    if (ot !== t && Math.hypot(ot.x-t.x, ot.y-t.y) <= t.range) {
+                        if (t.config.aura === 'range') ot.range *= 1.2;
+                        if (t.config.aura === 'cd') ot.cd *= 0.85;
+                        if (t.config.aura === 'detectFly') ot.canHitFly = true;
+                    }
                 }
             }
         }
 
-        for (let t of towers) { t.damage = t.baseDamage; t.cd = t.baseCd; }
         for (let t of towers) t.update();
         for (let i = projectiles.length - 1; i >= 0; i--) if (projectiles[i].update()) projectiles.splice(i, 1);
         
@@ -866,13 +1124,17 @@
 
         drawEntities(towers, enemies, projectiles);
 
-        if (networkConn && networkConn.open && frameCount % 2 === 0) {
-            networkConn.send({
+        if (isCoop && hostPeers.length > 0 && frameCount % 3 === 0) {
+            let syncData = {
                 type: 'SYNC', cb: cardboard, hp: baseHealth, wave: currentWave, wAct: waveActive, wWait: waveWaiting,
-                e: enemies.map(e => ({x: e.x, y: e.y, hp: e.hp, maxHp: e.maxHp, r: e.rad, c: e.color, fly: e.fly})),
-                t: towers.map(t => ({gridX: t.gridX, gridY: t.gridY, a: t.angle, rng: t.range, c: t.config.color, u: t.upgrades, h: t.isHero, level: t.level, xp: t.xp, config: t.config, id: t.config.id })),
+                e: enemies.map(e => ({x: e.x, y: e.y, hp: e.hp, maxHp: e.maxHp, rad: e.rad, color: e.color, fly: e.fly})),
+                t: towers.map(t => ({
+                    gridX: t.gridX, gridY: t.gridY, a: t.angle, rng: t.range, dmg: t.damage,
+                    u: t.upgrades || [0,0,0], isHero: !!t.isHero, level: t.level || 1, xp: t.xp || 0, id: t.config.id
+                })),
                 p: projectiles.map(p => ({x: p.x, y: p.y, c: p.twr.config.pColor}))
-            });
+            };
+            hostPeers.forEach(p => { if (p.open) p.send(syncData); });
         }
         frameCount++; animId = requestAnimationFrame(gameLoop);
     }
